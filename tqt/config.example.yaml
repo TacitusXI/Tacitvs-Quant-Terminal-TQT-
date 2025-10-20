@@ -1,0 +1,31 @@
+venues:
+  hyperliquid:
+    ws_url: wss://example
+    rest_url: https://example
+    fees_bps:
+      maker: -1.5
+      taker: 4.5
+    slip_bps_default: 1.0
+    risk_limits:
+      max_daily_loss_R: 5
+      max_concurrent_positions: 3
+
+strategies:
+  - id: tortoise
+    markets: ["BTC-PERP","ETH-PERP"]
+    params:
+      don_break: 20
+      don_exit: 10
+      trail_atr_len: 20
+      trail_mult: 2.0
+    mode: SIM
+
+risk:
+  per_trade_risk_pct: 1.0
+  hard_stop_R: 1.0
+  close_all_on_daily_loss_R: 5
+
+ev:
+  rolling_window_trades: 40
+  min_ev_net: 0.0
+  apply_rebates: true

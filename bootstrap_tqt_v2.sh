@@ -1,35 +1,121 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROJECT_DIR="${1:-tqt}"
+PY_VERSION_MIN="3.10.0"
+NODE_VERSION_MIN="18.0.0"
+
+banner() { printf "\n\033[1;36m==> %s\033[0m\n" "$*"; }
+warn()   { printf "\033[1;33m[warn]\033[0m %s\n" "$*"; }
+die()    { printf "\033[1;31m[err]\033[0m %s\n" "$*"; exit 1; }
+
+require_cmd() { command -v "$1" >/dev/null 2>&1 || die "Required command '$1' not found. Please install it."; }
+
+# Compare semantic versions: returns 0 if $1 >= $2
+ver_ge() {
+  python3 - "$1" "$2" <<'PY'
+import sys,re
+def norm(v):
+  parts = re.split(r'[^\d]+', v.strip('v'))
+  parts = [int(p) for p in parts if p.isdigit()]
+  parts = (parts + [0,0,0])[:3]
+  return tuple(parts)
+cur, req = norm(sys.argv[1]), norm(sys.argv[2])
+sys.exit(0 if cur >= req else 1)
+PY
+}
+
+banner "Checking dependencies"
+require_cmd python3
+require_cmd pip3
+require_cmd node
+require_cmd npm
+
+PY_VER="$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')"
+NODE_VER_RAW="$(node -v)"
+NODE_VER="${NODE_VER_RAW#v}"
+
+if ! ver_ge "$PY_VER" "$PY_VERSION_MIN"; then
+  die "Python >= ${PY_VERSION_MIN} required, found ${PY_VER}"
+fi
+if ! ver_ge "$NODE_VER" "$NODE_VERSION_MIN"; then
+  die "Node.js >= ${NODE_VERSION_MIN} required, found ${NODE_VER_RAW}"
+fi
+
+banner "Creating project directory: ${PROJECT_DIR}"
+mkdir -p "${PROJECT_DIR}"
+cd "${PROJECT_DIR}"
+
+banner "Writing .gitignore and skeleton folders"
+cat > .gitignore <<'GIT'
+# Node
+node_modules/
+npm-debug.log*
+.yarn/*
+.pnp.*
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Env/OS
+.env
+.env.*
+.DS_Store
+
+# Data
+data/
+*.parquet
+*.csv
+
+# Build
+dist/
+.next/
+GIT
+
+mkdir -p apps/ui apps/api core/exchanges core/execution core/ev core/strategy core/risk core/sim data scripts
+
+banner "Writing full README"
+cat > Tacitus_Quant_Terminal_README.md <<'BIGREADME'
 # Tacitus Quant Terminal — Hyperliquid-first, Venue-Agnostic MVP
 
 > Minimal, production-lean trading stack for **perp DEX execution** and **EV-first research**.  
 > Ships a full Hyperliquid path (data → signals → queue-aware execution sim → EV & risk → UI), while keeping the core **venue-agnostic** via a single `IExchange` interface (ready to plug in dYdX v4, Drift, etc.).
 
+---
+
+## Why this is a strong project (career & revenue)
+
+- **Quant value, not just code:** honest **EV in R**, queue-aware maker execution, rebates → lower **Costs_in_R** ⇒ higher P&L.  
+- **Portable:** same strategies on multiple venues by swapping adapters.  
+- **Mixed skill profile:** **quant research + execution engineering + risk** (rare and well paid).
+
+---
 
 ## Table of Contents
 
-- [Tacitus Quant Terminal — Hyperliquid-first, Venue-Agnostic MVP](#tacitus-quant-terminal--hyperliquid-first-venue-agnostic-mvp)
-  - [Table of Contents](#table-of-contents)
-  - [Goals](#goals)
-  - [Architecture \& Tech Stack](#architecture--tech-stack)
-  - [Quick Start](#quick-start)
-  - [Directory Layout](#directory-layout)
-  - [Core Concepts (R \& EV)](#core-concepts-r--ev)
-  - [Interfaces (venue-agnostic)](#interfaces-venue-agnostic)
-  - [Hyperliquid Adapter (MVP)](#hyperliquid-adapter-mvp)
-  - [Execution Engine](#execution-engine)
-  - [Risk Module](#risk-module)
-  - [EV Engine](#ev-engine)
-  - [Simulators \& Research](#simulators--research)
-  - [Built-in Strategies (reference tables)](#built-in-strategies-reference-tables)
-  - [UI /OPS \& /LAB](#ui-ops--lab)
-  - [Config](#config)
-  - [Logs \& Data](#logs--data)
-  - [Testing \& CI](#testing--ci)
-  - [Security](#security)
-  - [Roadmap](#roadmap)
-  - [Language Plan (TS + Python + Rust/Go)](#language-plan-ts--python--rustgo)
-  - [Monetization \& Portfolio Artifacts](#monetization--portfolio-artifacts)
-  - [License \& Disclaimer](#license--disclaimer)
-    - [Appendix — Snippets](#appendix--snippets)
+1. [Goals](#goals)  
+2. [Architecture & Tech Stack](#architecture--tech-stack)  
+3. [Quick Start](#quick-start)  
+4. [Directory Layout](#directory-layout)  
+5. [Core Concepts (R & EV)](#core-concepts-r--ev)  
+6. [Interfaces (venue-agnostic)](#interfaces-venueagnostic)  
+7. [Hyperliquid Adapter (MVP)](#hyperliquid-adapter-mvp)  
+8. [Execution Engine](#execution-engine)  
+9. [Risk Module](#risk-module)  
+10. [EV Engine](#ev-engine)  
+11. [Simulators & Research](#simulators--research)  
+12. [Built-in Strategies](#builtin-strategies)  
+13. [UI /OPS & /LAB](#ui-ops--lab)  
+14. [Config](#config)  
+15. [Logs & Data](#logs--data)  
+16. [Testing & CI](#testing--ci)  
+17. [Security](#security)  
+18. [Roadmap](#roadmap)  
+19. [Language Plan (TS + Python + Rust/Go)](#language-plan-ts--python--rustgo)  
+20. [Monetization & Portfolio Artifacts](#monetization--portfolio-artifacts)  
+21. [License & Disclaimer](#license--disclaimer)
 
 ---
 
@@ -414,3 +500,285 @@ def mc_perm(returns_R, N=10000, seed=42):
     sims = [rng.permutation(returns_R).sum() for _ in range(N)]
     return np.percentile(sims, [5, 50, 95]), float(np.mean(sims))
 ```
+
+BIGREADME
+
+# Short README pointer
+cat > README.md <<'MD'
+# Tacitus Quant Terminal — MVP
+
+See **Tacitus_Quant_Terminal_README.md** for the full spec and instructions.
+MD
+
+banner "Writing config and env examples"
+cat > config.example.yaml <<'YAML'
+venues:
+  hyperliquid:
+    ws_url: wss://example
+    rest_url: https://example
+    fees_bps:
+      maker: -1.5
+      taker: 4.5
+    slip_bps_default: 1.0
+    risk_limits:
+      max_daily_loss_R: 5
+      max_concurrent_positions: 3
+
+strategies:
+  - id: tortoise
+    markets: ["BTC-PERP","ETH-PERP"]
+    params:
+      don_break: 20
+      don_exit: 10
+      trail_atr_len: 20
+      trail_mult: 2.0
+    mode: SIM
+
+risk:
+  per_trade_risk_pct: 1.0
+  hard_stop_R: 1.0
+  close_all_on_daily_loss_R: 5
+
+ev:
+  rolling_window_trades: 40
+  min_ev_net: 0.0
+  apply_rebates: true
+YAML
+
+cat > .env.example <<'ENV'
+NODE_ENV=development
+API_PORT=8080
+UI_PORT=3000
+DATA_DIR=./data
+HL_REST_KEY=changeme
+HL_REST_SECRET=changeme
+ENV
+
+banner "Seeding TypeScript core interfaces"
+cat > core/exchanges/IExchange.ts <<'TS'
+export interface OrderBookLevel { price: number; size: number; }
+export interface OrderBookL2 { bids: OrderBookLevel[]; asks: OrderBookLevel[]; ts: number; }
+export interface Trade { ts: number; price: number; size: number; side: 'buy'|'sell'; }
+export interface FundingInfo { rate: number; nextTs: number; }
+export interface FeeSchedule { makerBps: number; takerBps: number; makerRebateBps?: number; }
+export interface RiskParams { initMargin: number; maintMargin: number; }
+
+export type TIF = 'GTC' | 'IOC' | 'FOK';
+export interface PlaceOrder {
+  pair: string; side: 'buy'|'sell'; qty: number; price?: number;
+  postOnly?: boolean; tif?: TIF; reduceOnly?: boolean; clientId?: string;
+}
+export interface Placed { id: string; status: 'accepted'|'rejected'; }
+
+export interface Position { pair: string; qty: number; entryPx: number; }
+
+export interface AccountInfo { equity: number; balances: Record<string, number>; tier?: string; }
+
+export interface IExchange {
+  name(): string;
+  time(): Promise<number>;
+  orderbook(pair: string): Promise<OrderBookL2>;
+  trades(pair: string, since?: number): AsyncIterable<Trade>;
+  funding(pair: string): Promise<FundingInfo>;
+  fees(tier?: string): Promise<FeeSchedule>;
+  riskParams(pair: string): Promise<RiskParams>;
+  place(o: PlaceOrder): Promise<Placed>;
+  cancel(id: string): Promise<void>;
+  positions(): Promise<Position[]>;
+  account(): Promise<AccountInfo>;
+}
+TS
+
+cat > core/strategy/IStrategy.ts <<'TS'
+export interface Bar { ts: number; o: number; h: number; l: number; c: number; v?: number; }
+export interface Signal {
+  type: 'entry'|'exit';
+  side?: 'buy'|'sell';
+  pair: string;
+  stopR?: number;
+  targetR?: number;
+  meta?: Record<string, any>;
+}
+export interface BarCtx {
+  pair: string;
+  bars: Bar[];
+  equity: number;
+}
+export interface IStrategy {
+  id: string;
+  markets: string[];
+  params: Record<string, any>;
+  onBar(ctx: BarCtx): Signal[];
+}
+TS
+
+cat > core/exchanges/HyperliquidExchange.ts <<'TS'
+import type { IExchange, OrderBookL2, Trade, FundingInfo, FeeSchedule, RiskParams, PlaceOrder, Placed, Position, AccountInfo } from "./IExchange";
+
+export class HyperliquidExchange implements IExchange {
+  constructor(private cfg: { wsUrl: string; restUrl: string; apiKey?: string; apiSecret?: string; }){}
+  name() { return "hyperliquid"; }
+  async time(): Promise<number> { return Date.now(); }
+  async orderbook(pair: string): Promise<OrderBookL2> { return { bids: [], asks: [], ts: Date.now() }; }
+  async *trades(pair: string, since?: number): AsyncIterable<Trade> { if (false) yield { ts: 0, price: 0, size: 0, side: 'buy' }; }
+  async funding(pair: string): Promise<FundingInfo> { return { rate: 0, nextTs: Date.now()+3600000 }; }
+  async fees(tier?: string): Promise<FeeSchedule> { return { makerBps: -1.5, takerBps: 4.5 }; }
+  async riskParams(pair: string): Promise<RiskParams> { return { initMargin: 0.05, maintMargin: 0.03 }; }
+  async place(o: PlaceOrder): Promise<Placed> { return { id: `mock-${Date.now()}`, status: 'accepted' }; }
+  async cancel(id: string): Promise<void> { return; }
+  async positions(): Promise<Position[]> { return []; }
+  async account(): Promise<AccountInfo> { return { equity: 0, balances: {} }; }
+}
+TS
+
+banner "Seeding Python API & EV core"
+mkdir -p apps/api
+python3 - <<'PY'
+from pathlib import Path
+api = Path("apps/api")
+(api/"__init__.py").write_text("")
+(api/"requirements.txt").write_text("\\n".join([
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic>=2.8.0",
+    "numpy>=1.26.0",
+    "polars>=1.5.0",
+    "duckdb>=1.0.0",
+]))
+(api/"main.py").write_text('''
+from fastapi import FastAPI
+from pydantic import BaseModel
+import numpy as np
+
+app = FastAPI(title="TQT API")
+
+class EVReq(BaseModel):
+    p: float
+    b: float
+    fees_eff: float
+    funding: float
+    slippage: float
+    gas: float
+    R_usd: float
+
+class EVResp(BaseModel):
+    costs_in_R: float
+    ev_net: float
+
+@app.get("/health")
+def health(): return {"ok": True}
+
+@app.post("/ev/calc", response_model=EVResp)
+def ev_calc(req: EVReq):
+    costs_in_r = (req.fees_eff + req.funding + req.slippage + req.gas) / max(req.R_usd, 1e-9)
+    ev_net = req.p * req.b - (1.0 - req.p) - costs_in_r
+    return {"costs_in_R": costs_in_r, "ev_net": ev_net}
+
+class MCreq(BaseModel):
+    returns_R: list[float]
+    N: int = 10000
+    seed: int = 42
+
+@app.post("/mc/perm")
+def mc_perm(req: MCreq):
+    rng = np.random.default_rng(req.seed)
+    sims = [rng.permutation(req.returns_R).sum() for _ in range(req.N)]
+    import numpy as np
+    p5,p50,p95 = np.percentile(sims, [5,50,95]).tolist()
+    return {"p5": p5, "p50": p50, "p95": p95, "mean": float(np.mean(sims))}
+''')
+PY
+
+banner "Creating Makefile"
+cat > Makefile <<'MK'
+.PHONY: setup ui api dev fmt
+
+setup: ## Install UI and API deps
+	@echo "==> Installing Python deps"
+	python3 -m venv .venv
+	. .venv/bin/activate && pip install -U pip && pip install -r apps/api/requirements.txt
+	@echo "==> Installing UI deps (Next.js app)"
+	cd apps/ui && npm install
+
+ui: ## Run UI dev server
+	cd apps/ui && npm run dev
+
+api: ## Run API dev server
+	. .venv/bin/activate && uvicorn apps.api.main:app --reload --port $${API_PORT:-8080}
+
+dev: ## Run UI and API together
+	@echo "==> Starting API & UI (Ctrl-C to stop)"
+	( . .venv/bin/activate && uvicorn apps.api.main:app --reload --port $${API_PORT:-8080} ) &
+	API_PID=$$!; \
+	( cd apps/ui && npm run dev ) & \
+	UI_PID=$$!; \
+	trap 'kill $$API_PID $$UI_PID 2>/dev/null || true' INT TERM; \
+	wait
+
+fmt:
+	npx prettier -w . || true
+MK
+
+banner "Bootstrapping Next.js UI (non-interactive)"
+cd apps/ui
+npx --yes create-next-app@latest . --ts --eslint --tailwind --app --use-npm --no-src-dir --import-alias "@/*"
+
+npm install --save recharts framer-motion zustand @tanstack/react-query clsx lucide-react
+
+mkdir -p app/OPS app/LAB components lib
+
+cat > app/OPS/page.tsx <<'TSX'
+export default function OPS() {
+  return (
+    <main className="p-6 space-y-4">
+      <h1 className="text-2xl font-semibold">OPS — Live Terminal</h1>
+      <div className="grid md:grid-cols-3 gap-4">
+        <div className="rounded-2xl p-4 shadow bg-neutral-900 text-neutral-100">
+          <h2 className="font-medium mb-2">Tables</h2>
+          <ul className="text-sm space-y-2">
+            <li>BTC-PERP — <span className="text-green-400">EV ON</span></li>
+            <li>ETH-PERP — <span className="text-yellow-400">EV ~0</span></li>
+          </ul>
+        </div>
+        <div className="rounded-2xl p-4 shadow bg-neutral-900 text-neutral-100">
+          <h2 className="font-medium mb-2">Controls</h2>
+          <div className="space-x-2">
+            <button className="px-3 py-2 rounded-xl bg-emerald-600">ARM</button>
+            <button className="px-3 py-2 rounded-xl bg-amber-600">HOLD</button>
+            <button className="px-3 py-2 rounded-xl bg-sky-600">SIM</button>
+          </div>
+        </div>
+        <div className="rounded-2xl p-4 shadow bg-neutral-900 text-neutral-100">
+          <h2 className="font-medium mb-2">Ops Log</h2>
+          <pre className="text-xs">
+{`14:31Z | BTC-PERP | TORTOISE | ENTRY L | R_$=120 | EV=+0.16 | maker`}
+          </pre>
+        </div>
+      </div>
+    </main>
+  );
+}
+TSX
+
+cat > app/LAB/page.tsx <<'TSX'
+export default function LAB() {
+  return (
+    <main className="p-6 space-y-4">
+      <h1 className="text-2xl font-semibold">LAB — Research</h1>
+      <p className="text-neutral-400 text-sm">Backtests, Walk-Forward, Monte Carlo, queue sim.</p>
+    </main>
+  );
+}
+TSX
+
+cd ../..
+
+banner "Done."
+echo
+echo "Next steps:"
+echo "  1) cd ${PROJECT_DIR}"
+echo "  2) cp .env.example .env && cp config.example.yaml config.yaml"
+echo "  3) make setup"
+echo "  4) make dev     # API on http://localhost:${API_PORT:-8080}, UI on http://localhost:3000"
+echo
+echo "Happy building!"

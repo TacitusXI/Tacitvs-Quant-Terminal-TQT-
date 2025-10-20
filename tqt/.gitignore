@@ -1,0 +1,24 @@
+# Node
+node_modules/
+npm-debug.log*
+.yarn/*
+.pnp.*
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Env/OS
+.env
+.env.*
+.DS_Store
+
+# Data
+data/
+*.parquet
+*.csv
+
+# Build
+dist/
+.next/
