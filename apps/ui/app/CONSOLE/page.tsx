@@ -199,6 +199,7 @@ export default function CONSOLE() {
               crimson: "🔴",
               ocean: "🌊",
               sunset: "🌅",
+              inferno: "🔥",
             };
             
             output = [

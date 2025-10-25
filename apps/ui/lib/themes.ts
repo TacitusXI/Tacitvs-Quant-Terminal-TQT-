@@ -5,7 +5,7 @@
  * Switch themes via CONSOLE: theme <name>
  */
 
-export type ThemeName = "blade" | "matrix" | "crimson" | "ocean" | "sunset";
+export type ThemeName = "blade" | "matrix" | "crimson" | "ocean" | "sunset" | "inferno";
 
 export interface Theme {
   name: ThemeName;
@@ -237,25 +237,25 @@ export const sunsetTheme: Theme = {
     primary: "#F97316",      // Orange
     secondary: "#A855F7",    // Purple
     accent: "#FB923C",       // Light orange
-    
+
     ion: "#84CC16",          // Lime
     shock: "#EC4899",        // Pink
-    
+
     voidBlack: "#0f0a08",
     deepSpace: "#1a0f0d",
-    
+
     neutral100: "#fff7ed",
     neutral200: "#ffedd5",
     neutral300: "#fed7aa",
     neutral400: "#fdba74",
     neutral500: "#fb923c",
     neutral600: "#f97316",
-    
+
     success: "#84CC16",
     warning: "#EAB308",
     danger: "#EF4444",
     info: "#A855F7",
-    
+
     glowPrimary: "rgba(249, 115, 22, 0.6)",
     glowSecondary: "rgba(168, 85, 247, 0.6)",
     glowSuccess: "rgba(132, 204, 22, 0.6)",
@@ -269,6 +269,49 @@ export const sunsetTheme: Theme = {
 };
 
 /**
+ * Inferno Theme
+ * Fiery red/magenta on pure black - aggressive and intense
+ */
+export const infernoTheme: Theme = {
+  name: "inferno",
+  displayName: "Inferno",
+  description: "Fiery red/magenta on pure black - aggressive trading heat",
+  colors: {
+    primary: "#F82907",      // Blazing Red-Orange
+    secondary: "#9F004A",    // Deep Magenta
+    accent: "#FF4500",       // Orange Red
+
+    ion: "#FF1493",          // Deep Pink (for success)
+    shock: "#FF0000",        // Pure Red
+
+    voidBlack: "#000000",    // Pure Black
+    deepSpace: "#0a0000",    // Almost black with red tint
+
+    neutral100: "#FFE5E5",
+    neutral200: "#FFCCCC",
+    neutral300: "#FF9999",
+    neutral400: "#FF6666",
+    neutral500: "#FF3333",
+    neutral600: "#CC0000",
+
+    success: "#FF1493",      // Deep Pink for wins
+    warning: "#FF6600",      // Orange warning
+    danger: "#F82907",       // Primary red
+    info: "#9F004A",         // Magenta for info
+
+    glowPrimary: "rgba(248, 41, 7, 0.8)",     // Intense red glow
+    glowSecondary: "rgba(159, 0, 74, 0.8)",   // Magenta glow
+    glowSuccess: "rgba(255, 20, 147, 0.7)",   // Pink glow
+    glowDanger: "rgba(248, 41, 7, 0.9)",      // Danger red glow
+  },
+  effects: {
+    glassBlur: "8px",        // Sharp, less blur for intensity
+    metalSpecular: "linear-gradient(135deg, rgba(255,50,50,0.15) 0%, transparent 50%)",
+    scanlineOpacity: "0.06", // More visible scanlines for aggression
+  },
+};
+
+/**
  * Theme registry
  */
 export const themes: Record<ThemeName, Theme> = {
@@ -277,6 +320,7 @@ export const themes: Record<ThemeName, Theme> = {
   crimson: crimsonTheme,
   ocean: oceanTheme,
   sunset: sunsetTheme,
+  inferno: infernoTheme,
 };
 
 /**
