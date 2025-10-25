@@ -1,15 +1,16 @@
 "use client";
 
+import { MainLayout } from "@/components/layout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { MarketMatrix } from "@/components/market-matrix";
 import { PriceChart } from "@/components/charts/price-chart";
 import { ApiStatus } from "@/components/api-status";
+import { PageTransition, FadeIn, Stagger } from "@/components/animations";
 import { useUIStore, useMarketStore } from "@/lib/store";
 import { Timestamp } from "@/components/ui/timestamp";
 import { formatR, formatCurrency, cn } from "@/lib/utils";
-import Image from "next/image";
 
 export default function OPS() {
   const { opsMode, riskPct, routing, setOpsMode, setRiskPct, setRouting } = useUIStore();
@@ -23,32 +24,26 @@ export default function OPS() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0c12] p-6">
+    <MainLayout>
       <div className="space-y-6">
-        {/* Header with Logo */}
-        <div className="flex items-center justify-between border-b border-[#1a1f2e] pb-4">
-          <div className="flex items-center gap-4">
-            <Image src="/logo.webp" alt="TQT" width={40} height={40} className="rounded-lg" />
-            <div>
-              <h1 className="text-3xl font-bold cyber-title">OPS Terminal</h1>
-              <p className="text-[#2D8EDF] font-mono text-sm">Live trading operations and monitoring</p>
-            </div>
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold cyber-title">OPS Terminal</h1>
+            <p className="text-[#2D8EDF] font-mono text-sm">Live trading operations and monitoring</p>
           </div>
-          <div className="flex items-center gap-4">
-            <Timestamp />
-            <div className="flex items-center gap-2">
-              {opsMode === "ARM" ? (
-                <>
-                  <div className="w-3 h-3 bg-[#8AFF00] rounded-full neon-glow-ion animate-pulse" />
-                  <span className="text-sm font-mono text-ion uppercase tracking-wider">⚡ ARMED</span>
-                </>
-              ) : (
-                <>
-                  <div className="w-3 h-3 bg-[#16A34A] rounded-full cyber-lamp" />
-                  <span className="text-sm font-mono text-[#16A34A] uppercase tracking-wider">SYSTEM ACTIVE</span>
-                </>
-              )}
-            </div>
+          <div className="flex items-center gap-2">
+            {opsMode === "ARM" ? (
+              <>
+                <div className="w-3 h-3 bg-[#8AFF00] rounded-full neon-glow-ion animate-pulse" />
+                <span className="text-sm font-mono text-ion uppercase tracking-wider">⚡ ARMED</span>
+              </>
+            ) : (
+              <>
+                <div className="w-3 h-3 bg-[#16A34A] rounded-full cyber-lamp" />
+                <span className="text-sm font-mono text-[#16A34A] uppercase tracking-wider">SYSTEM ACTIVE</span>
+              </>
+            )}
           </div>
         </div>
 
@@ -228,6 +223,6 @@ export default function OPS() {
           targetPrice={54000}
         />
       </div>
-    </div>
+    </MainLayout>
   );
 }
