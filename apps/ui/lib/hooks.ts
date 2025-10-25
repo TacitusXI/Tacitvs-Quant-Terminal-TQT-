@@ -239,6 +239,39 @@ export function useMarketData(market: string) {
 
 // Hook for multiple markets
 export function useMarketsData(markets: string[]) {
+  const { dataMode } = useUIStore();
+  
+  // In MOCK mode, return mock data immediately
+  if (dataMode === "MOCK") {
+    const mockMarketData = markets.map(market => {
+      // Generate mock EV data based on market
+      const mockEV = market === "BTC-PERP" ? 0.16 : market === "ETH-PERP" ? -0.02 : -0.12;
+      const mockWinRate = market === "BTC-PERP" ? 0.45 : market === "ETH-PERP" ? 0.42 : 0.38;
+      const mockAvgWin = market === "BTC-PERP" ? 2.5 : market === "ETH-PERP" ? 2.2 : 1.8;
+      
+      return {
+        market,
+        candles: null,
+        ev: {
+          ev: mockEV,
+          winRate: mockWinRate,
+          avgWin: mockAvgWin,
+          timestamp: Date.now(),
+        },
+        health: null,
+        isLoading: false,
+        error: null,
+      };
+    });
+    
+    return {
+      markets: mockMarketData,
+      isLoading: false,
+      error: null,
+    };
+  }
+  
+  // LIVE mode - fetch real data
   const queries = markets.map(market => useMarketData(market));
   
   return {
