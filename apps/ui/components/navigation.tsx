@@ -34,11 +34,13 @@ export function Navigation() {
           <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
             <div className="relative w-8 h-8">
               <Image
-                src="/logo.webp"
+                src="/logo.webp?v=2"
                 alt="TQT Logo"
                 width={32}
                 height={32}
                 className="object-contain group-hover:scale-110 transition-transform"
+                priority
+                unoptimized
               />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent">

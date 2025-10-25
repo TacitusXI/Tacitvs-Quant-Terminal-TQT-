@@ -21,12 +21,12 @@ export const metadata: Metadata = {
   description: "Professional quant trading terminal with EV-first approach",
   icons: {
     icon: [
-      { url: '/logo.webp', type: 'image/webp' },
+      { url: '/logo.webp?v=2', type: 'image/webp' },
     ],
     apple: [
-      { url: '/logo.webp', type: 'image/webp' },
+      { url: '/logo.webp?v=2', type: 'image/webp' },
     ],
-    shortcut: '/logo.webp',
+    shortcut: '/logo.webp?v=2',
   },
 };
 
