@@ -1,26 +1,610 @@
 @import "tailwindcss";
 
+/* ============================================
+   SILENT BLADE DESIGN SYSTEM - TACITUS QUANT TERMINAL
+   "Precision forged in darkness"
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* === THE BLADE: Core Colors === */
+  --neon-purple: #6243DD;      /* Violet core - intelligence, premium */
+  --neon-cyan: #2D8EDF;        /* Cyber blue - reliability, tech */
+  --neon-blue: #00f3ff;        /* Electric accent - energy */
+  
+  /* === THE STEEL: Base Colors === */
+  --void-black: #0a0b0e;       /* Gunmetal background */
+  --deep-space: #0a0a14;       /* Card backgrounds */
+  --abyss: #050508;            /* Deepest shadows */
+  --border-steel: #1b2230;     /* Metal borders */
+  --grid-color: rgba(98, 67, 221, 0.08); /* Subtle grid */
+  
+  /* === THE EDGE: Rare Accents (≤5% usage) === */
+  --ion-green: #8AFF00;        /* Laser precision - critical wins */
+  --magenta-shock: #FF2E88;    /* Alert state - danger zones */
+  --amber-forge: #FFB020;      /* Warm metal - important CTA */
+  
+  /* === TRADING SIGNALS: Status Colors === */
+  --success-emerald: #16A34A;  /* Profitable, EV > 0.05R */
+  --warning-amber: #FFB020;    /* Caution, EV 0-0.05R */
+  --danger-rose: #F43F5E;      /* Loss, EV < 0R */
+  --info-cyan: #7FB7FF;        /* Information, neutral */
+  
+  /* === GLOWS & SHADOWS === */
+  --glow-purple: rgba(98, 67, 221, 0.6);
+  --glow-cyan: rgba(45, 142, 223, 0.6);
+  --glow-ion: rgba(138, 255, 0, 0.45);
+  --glow-magenta: rgba(255, 46, 136, 0.5);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background-color: var(--void-black);
+    color: white;
+    font-family: ui-monospace, 'Courier New', monospace;
+    background-image: 
+      /* Cyberpunk Grid */
+      linear-gradient(var(--grid-color) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, var(--grid-color) 1.5px, transparent 1.5px),
+      /* Radial Glow */
+      radial-gradient(circle at 20% 30%, rgba(115, 74, 253, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(49, 164, 253, 0.12) 0%, transparent 50%),
+      /* Deep space gradient */
+      linear-gradient(180deg, var(--abyss) 0%, var(--void-black) 50%, var(--deep-space) 100%);
+    background-size: 40px 40px, 40px 40px, 100% 100%, 100% 100%, 100% 100%;
+    background-attachment: fixed, fixed, fixed, fixed, fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* Animated stars effect */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent),
+      radial-gradient(2px 2px at 90% 60%, white, transparent),
+      radial-gradient(1px 1px at 33% 50%, white, transparent),
+      radial-gradient(1px 1px at 75% 80%, white, transparent);
+    background-size: 200% 200%;
+    animation: stars 60s linear infinite;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  @keyframes stars {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* ============================================
+     CYBERPUNK TEXT STYLES
+     ============================================ */
+  
+  .cyber-text {
+    color: var(--neon-cyan);
+    text-shadow: 
+      0 0 10px var(--glow-cyan),
+      0 0 20px var(--glow-cyan),
+      0 0 30px var(--glow-cyan);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  
+  .cyber-title {
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan), var(--neon-blue));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 15px var(--glow-purple));
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: gradient-shift 8s ease infinite;
+    position: relative;
+  }
+  
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  /* Glitch effect for titles */
+  .glitch-title {
+    position: relative;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--neon-cyan);
+    text-shadow: 
+      0 0 10px var(--glow-cyan),
+      0 0 20px var(--glow-cyan);
+  }
+  
+  .glitch-title::before,
+  .glitch-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .glitch-title::before {
+    animation: glitch-1 3s infinite linear alternate-reverse;
+    color: var(--neon-purple);
+    z-index: -1;
+  }
+  
+  .glitch-title::after {
+    animation: glitch-2 2.5s infinite linear alternate-reverse;
+    color: var(--neon-blue);
+    z-index: -2;
+  }
+  
+  @keyframes glitch-1 {
+    0% { transform: translate(0); opacity: 1; }
+    20% { transform: translate(-3px, 3px); opacity: 0.8; }
+    40% { transform: translate(-2px, -2px); opacity: 1; }
+    60% { transform: translate(3px, -2px); opacity: 0.9; }
+    80% { transform: translate(2px, 2px); opacity: 0.8; }
+    100% { transform: translate(0); opacity: 1; }
+  }
+  
+  @keyframes glitch-2 {
+    0% { transform: translate(0); opacity: 1; }
+    25% { transform: translate(2px, -2px); opacity: 0.7; }
+    50% { transform: translate(-2px, 2px); opacity: 1; }
+    75% { transform: translate(3px, 2px); opacity: 0.8; }
+    100% { transform: translate(0); opacity: 1; }
+  }
+  
+  /* ============================================
+     CYBERPUNK CARDS & PANELS
+     ============================================ */
+  
+  .cyber-card {
+    background: rgba(10, 10, 20, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(115, 74, 253, 0.3);
+    border-radius: 16px;
+    box-shadow: 
+      0 0 30px rgba(115, 74, 253, 0.2),
+      inset 0 0 30px rgba(49, 164, 253, 0.05),
+      0 8px 32px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Animated border gradient */
+  .cyber-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan), var(--neon-purple));
+    background-size: 400% 400%;
+    border-radius: 16px;
+    opacity: 0;
+    z-index: -1;
+    animation: gradient-rotate 8s ease infinite;
+    transition: opacity 0.4s;
+  }
+  
+  .cyber-card:hover::before {
+    opacity: 0.6;
+  }
+  
+  @keyframes gradient-rotate {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  .cyber-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: rgba(49, 164, 253, 0.5);
+    box-shadow: 
+      0 0 50px rgba(49, 164, 253, 0.4),
+      inset 0 0 40px rgba(115, 74, 253, 0.08),
+      0 12px 48px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Inner glow effect */
+  .cyber-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(115, 74, 253, 0.2) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  
+  .cyber-card:hover::after {
+    opacity: 1;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+  }
+  
+  /* ============================================
+     CYBERPUNK BUTTONS
+     ============================================ */
+  
+  .cyber-btn {
+    position: relative;
+    padding: 0.75rem 2rem;
+    background: rgba(10, 10, 20, 0.9);
+    border: 2px solid var(--neon-purple);
+    color: var(--neon-cyan);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 0 20px rgba(115, 74, 253, 0.4),
+      inset 0 0 20px rgba(49, 164, 253, 0.1);
+  }
+  
+  .cyber-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(115, 74, 253, 0.4), transparent);
+    transition: left 0.5s;
+  }
+  
+  .cyber-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--neon-cyan);
+    box-shadow: 
+      0 0 40px rgba(49, 164, 253, 0.6),
+      inset 0 0 30px rgba(115, 74, 253, 0.2);
+    color: white;
+  }
+  
+  .cyber-btn:hover::before {
+    left: 100%;
+  }
+  
+  .cyber-btn:active {
+    transform: translateY(0);
+  }
+  
+  /* ============================================
+     CYBERPUNK INPUTS
+     ============================================ */
+  
+  .cyber-input {
+    background: rgba(10, 10, 20, 0.6);
+    border: 1px solid rgba(115, 74, 253, 0.3);
+    color: var(--neon-cyan);
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+    box-shadow: 
+      inset 0 0 10px rgba(0, 0, 0, 0.5),
+      0 0 10px rgba(115, 74, 253, 0.2);
+  }
+  
+  .cyber-input:focus {
+    outline: none;
+    border-color: var(--neon-cyan);
+    box-shadow: 
+      inset 0 0 15px rgba(0, 0, 0, 0.6),
+      0 0 20px rgba(49, 164, 253, 0.4),
+      0 0 30px rgba(115, 74, 253, 0.2);
+    color: white;
+  }
+  
+  .cyber-input::placeholder {
+    color: rgba(49, 164, 253, 0.4);
+  }
+  
+  /* ============================================
+     LAMP / STATUS INDICATORS
+     ============================================ */
+  
+  .cyber-lamp {
+    position: relative;
+    border-radius: 50%;
+    box-shadow: 
+      0 0 20px currentColor,
+      0 0 40px currentColor,
+      inset 0 0 10px currentColor;
+    animation: lamp-pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes lamp-pulse {
+    0%, 100% { 
+      box-shadow: 
+        0 0 20px currentColor,
+        0 0 40px currentColor,
+        inset 0 0 10px currentColor;
+    }
+    50% { 
+      box-shadow: 
+        0 0 30px currentColor,
+        0 0 60px currentColor,
+        inset 0 0 15px currentColor;
+    }
+  }
+  
+  /* ============================================
+     HOLOGRAPHIC EFFECTS
+     ============================================ */
+  
+  .holographic {
+    position: relative;
+    background: linear-gradient(135deg, 
+      rgba(115, 74, 253, 0.1) 0%, 
+      rgba(49, 164, 253, 0.1) 25%,
+      rgba(0, 243, 255, 0.1) 50%,
+      rgba(49, 164, 253, 0.1) 75%,
+      rgba(115, 74, 253, 0.1) 100%
+    );
+    background-size: 200% 200%;
+    animation: hologram-shift 6s ease infinite;
+  }
+  
+  @keyframes hologram-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  .holographic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.1), 
+      transparent
+    );
+    animation: scan-line 3s linear infinite;
+  }
+  
+  @keyframes scan-line {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  /* ============================================
+     MATRIX TEXT EFFECT
+     ============================================ */
+  
+  .matrix-text {
+    font-family: 'Courier New', monospace;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--glow-cyan);
+    animation: matrix-flicker 0.15s infinite alternate;
+  }
+  
+  @keyframes matrix-flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.95; }
+  }
+  
+  /* ============================================
+     TERMINAL SCANLINES
+     ============================================ */
+  
+  .scanlines {
+    position: relative;
+  }
+  
+  .scanlines::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      transparent 50%, 
+      rgba(0, 0, 0, 0.1) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    animation: scan 8s linear infinite;
+    opacity: 0.1;
+  }
+  
+  @keyframes scan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(4px); }
+  }
+  
+  /* ============================================
+     SKELETON LOADING STATES
+     ============================================ */
+  
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .skeleton-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(98, 67, 221, 0.08) 20%,
+      rgba(45, 142, 223, 0.12) 50%,
+      rgba(98, 67, 221, 0.08) 80%,
+      transparent 100%
+    );
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  
+  .skeleton-shimmer-gradient {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(98, 67, 221, 0.1) 50%,
+      transparent 100%
+    );
+    animation: shimmer-gradient 2s infinite;
+  }
+  
+  @keyframes shimmer-gradient {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  /* ============================================
+     UTILITY CLASSES
+     ============================================ */
+  
+  /* Neon Glows - Standard */
+  .neon-glow-purple {
+    box-shadow: 0 0 20px var(--glow-purple);
+  }
+  
+  .neon-glow-cyan {
+    box-shadow: 0 0 20px var(--glow-cyan);
+  }
+  
+  /* Rare Accent Glows (≤5% usage) */
+  .neon-glow-ion {
+    box-shadow: 0 0 20px var(--glow-ion);
+    filter: drop-shadow(0 0 8px var(--glow-ion));
+  }
+  
+  .neon-glow-magenta {
+    box-shadow: 0 0 20px var(--glow-magenta);
+    filter: drop-shadow(0 0 8px var(--glow-magenta));
+  }
+  
+  /* Text Effects */
+  .text-shadow-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+  
+  .text-ion {
+    color: var(--ion-green);
+    text-shadow: 0 0 8px var(--glow-ion);
+  }
+  
+  .text-magenta {
+    color: var(--magenta-shock);
+    text-shadow: 0 0 8px var(--glow-magenta);
+  }
+  
+  /* Blade Gradient (22.5° diagonal) */
+  .blade-gradient {
+    background: linear-gradient(22.5deg, var(--neon-purple) 0%, var(--neon-cyan) 100%);
+  }
+  
+  /* Metal Specular Highlights */
+  .metal-specular {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.04), transparent),
+      linear-gradient(22.5deg, rgba(98,67,221,0.12), rgba(45,142,223,0.12)),
+      var(--deep-space);
+  }
+  
+  /* Smooth transitions */
+  .transition-cyber {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Focus Ring - Ion Green (keyboard navigation) */
+  *:focus-visible {
+    outline: 2px solid var(--ion-green);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(138, 255, 0, 0.2);
+  }
+  
+  /* ============================================
+     SCROLLBAR STYLING
+     ============================================ */
+  
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(10, 10, 20, 0.5);
+    border-left: 1px solid rgba(115, 74, 253, 0.2);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--neon-purple), var(--neon-cyan));
+    border-radius: 6px;
+    border: 2px solid rgba(10, 10, 20, 0.5);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--neon-cyan), var(--neon-blue));
+    box-shadow: 0 0 10px var(--glow-cyan);
+  }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  body {
+    background-size: 30px 30px, 30px 30px, 100% 100%, 100% 100%, 100% 100%;
+  }
+  
+  .cyber-title {
+    font-size: 1.5rem;
+  }
+  
+  .cyber-card {
+    border-radius: 12px;
+  }
 }
