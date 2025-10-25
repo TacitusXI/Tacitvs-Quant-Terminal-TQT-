@@ -14,6 +14,7 @@ The Tacitus Quant Terminal includes a powerful theming system that allows you to
 - **Rare Accents**: Ion Green (`#8AFF00`), Magenta Shock (`#F43F5E`)
 - **Description**: Cyberpunk purple/cyan aesthetic with neon accents
 - **Best For**: Default professional trading interface with premium feel
+- **Emoji**: ⚔️
 
 ### 2. **Matrix** - `matrix`
 - **Colors**: Green monochrome terminal aesthetic
@@ -22,30 +23,17 @@ The Tacitus Quant Terminal includes a powerful theming system that allows you to
 - **Accent**: `#39FF14` (Neon Green)
 - **Description**: Green monochrome terminal aesthetic inspired by The Matrix
 - **Best For**: Terminal purists, retro enthusiasts, pure data focus
+- **Emoji**: 💚
 
-### 3. **Crimson** - `crimson`
-- **Colors**: Red/Orange aggressive trading aesthetic
-- **Primary**: `#DC2626` (Red)
-- **Secondary**: `#F97316` (Orange)
-- **Accent**: `#EF4444` (Bright Red)
-- **Description**: Red/orange aggressive trading aesthetic
-- **Best For**: High-intensity trading, risk-taking, aggressive strategies
-
-### 4. **Ocean** - `ocean`
-- **Colors**: Blue/Teal calm professional aesthetic
-- **Primary**: `#0EA5E9` (Sky Blue)
-- **Secondary**: `#14B8A6` (Teal)
-- **Accent**: `#06B6D4` (Cyan)
-- **Description**: Blue/teal calm professional aesthetic
-- **Best For**: Long-term trading, calmer mood, professional presentations
-
-### 5. **Sunset** - `sunset`
-- **Colors**: Orange/Purple warm evening aesthetic
-- **Primary**: `#F97316` (Orange)
-- **Secondary**: `#A855F7` (Purple)
-- **Accent**: `#FB923C` (Light Orange)
-- **Description**: Orange/purple warm evening aesthetic
-- **Best For**: Evening trading sessions, warm and inviting feel
+### 3. **Inferno** - `inferno`
+- **Colors**: Fiery red/magenta on pure black
+- **Primary**: `#F82907` (Blazing Red-Orange)
+- **Secondary**: `#9F004A` (Deep Magenta)
+- **Accent**: `#FF4500` (Orange Red)
+- **Background**: `#000000` (Pure Black)
+- **Description**: Fiery red/magenta on pure black - aggressive trading heat
+- **Best For**: High-stakes trading, aggressive conditions, maximum intensity
+- **Emoji**: 🔥
 
 ## How to Switch Themes
 
@@ -58,10 +46,8 @@ Navigate to the **CONSOLE** terminal (shortcut: `Cmd/Ctrl+4`) and use the `theme
 > theme
 
 # Switch to a specific theme
-> theme matrix    # Switch to Matrix theme
-> theme crimson   # Switch to Crimson theme
-> theme ocean     # Switch to Ocean theme
-> theme sunset    # Switch to Sunset theme
+> theme matrix    # Switch to Matrix theme (green)
+> theme inferno   # Switch to Inferno theme (red/magenta)
 > theme blade     # Switch back to default Silent Blade theme
 ```
 

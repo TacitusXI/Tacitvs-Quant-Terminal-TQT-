@@ -5,7 +5,7 @@
  * Switch themes via CONSOLE: theme <name>
  */
 
-export type ThemeName = "blade" | "matrix" | "crimson" | "ocean" | "sunset" | "inferno";
+export type ThemeName = "blade" | "matrix" | "inferno";
 
 export interface Theme {
   name: ThemeName;
@@ -140,135 +140,6 @@ export const matrixTheme: Theme = {
 };
 
 /**
- * Crimson Theme
- * Red/orange aggressive trading aesthetic
- */
-export const crimsonTheme: Theme = {
-  name: "crimson",
-  displayName: "Crimson",
-  description: "Red/orange aggressive trading aesthetic",
-  colors: {
-    primary: "#DC2626",      // Red
-    secondary: "#F97316",    // Orange
-    accent: "#EF4444",       // Bright red
-    
-    ion: "#10B981",          // Green for contrast
-    shock: "#EC4899",        // Pink
-    
-    voidBlack: "#0f0a0a",
-    deepSpace: "#1a0f0f",
-    
-    neutral100: "#fef2f2",
-    neutral200: "#fee2e2",
-    neutral300: "#fecaca",
-    neutral400: "#fca5a5",
-    neutral500: "#f87171",
-    neutral600: "#ef4444",
-    
-    success: "#10B981",
-    warning: "#F59E0B",
-    danger: "#DC2626",
-    info: "#F97316",
-    
-    glowPrimary: "rgba(220, 38, 38, 0.7)",
-    glowSecondary: "rgba(249, 115, 22, 0.7)",
-    glowSuccess: "rgba(16, 185, 129, 0.6)",
-    glowDanger: "rgba(220, 38, 38, 0.8)",
-  },
-  effects: {
-    glassBlur: "10px",
-    metalSpecular: "linear-gradient(135deg, rgba(255,100,100,0.1) 0%, transparent 50%)",
-    scanlineOpacity: "0.05",
-  },
-};
-
-/**
- * Ocean Theme
- * Blue/teal calm trading aesthetic
- */
-export const oceanTheme: Theme = {
-  name: "ocean",
-  displayName: "Ocean",
-  description: "Blue/teal calm professional aesthetic",
-  colors: {
-    primary: "#0EA5E9",      // Sky Blue
-    secondary: "#14B8A6",    // Teal
-    accent: "#06B6D4",       // Cyan
-    
-    ion: "#10B981",          // Green
-    shock: "#EC4899",        // Pink
-    
-    voidBlack: "#0a0f12",
-    deepSpace: "#0f1419",
-    
-    neutral100: "#f0f9ff",
-    neutral200: "#e0f2fe",
-    neutral300: "#bae6fd",
-    neutral400: "#7dd3fc",
-    neutral500: "#38bdf8",
-    neutral600: "#0ea5e9",
-    
-    success: "#10B981",
-    warning: "#F59E0B",
-    danger: "#EF4444",
-    info: "#0EA5E9",
-    
-    glowPrimary: "rgba(14, 165, 233, 0.6)",
-    glowSecondary: "rgba(20, 184, 166, 0.6)",
-    glowSuccess: "rgba(16, 185, 129, 0.6)",
-    glowDanger: "rgba(239, 68, 68, 0.6)",
-  },
-  effects: {
-    glassBlur: "14px",
-    metalSpecular: "linear-gradient(135deg, rgba(100,200,255,0.1) 0%, transparent 50%)",
-    scanlineOpacity: "0.02",
-  },
-};
-
-/**
- * Sunset Theme
- * Orange/purple warm aesthetic
- */
-export const sunsetTheme: Theme = {
-  name: "sunset",
-  displayName: "Sunset",
-  description: "Orange/purple warm evening aesthetic",
-  colors: {
-    primary: "#F97316",      // Orange
-    secondary: "#A855F7",    // Purple
-    accent: "#FB923C",       // Light orange
-
-    ion: "#84CC16",          // Lime
-    shock: "#EC4899",        // Pink
-
-    voidBlack: "#0f0a08",
-    deepSpace: "#1a0f0d",
-
-    neutral100: "#fff7ed",
-    neutral200: "#ffedd5",
-    neutral300: "#fed7aa",
-    neutral400: "#fdba74",
-    neutral500: "#fb923c",
-    neutral600: "#f97316",
-
-    success: "#84CC16",
-    warning: "#EAB308",
-    danger: "#EF4444",
-    info: "#A855F7",
-
-    glowPrimary: "rgba(249, 115, 22, 0.6)",
-    glowSecondary: "rgba(168, 85, 247, 0.6)",
-    glowSuccess: "rgba(132, 204, 22, 0.6)",
-    glowDanger: "rgba(239, 68, 68, 0.6)",
-  },
-  effects: {
-    glassBlur: "12px",
-    metalSpecular: "linear-gradient(135deg, rgba(255,150,100,0.1) 0%, transparent 50%)",
-    scanlineOpacity: "0.04",
-  },
-};
-
-/**
  * Inferno Theme
  * Fiery red/magenta on pure black - aggressive and intense
  */
@@ -317,9 +188,6 @@ export const infernoTheme: Theme = {
 export const themes: Record<ThemeName, Theme> = {
   blade: bladeTheme,
   matrix: matrixTheme,
-  crimson: crimsonTheme,
-  ocean: oceanTheme,
-  sunset: sunsetTheme,
   inferno: infernoTheme,
 };
 

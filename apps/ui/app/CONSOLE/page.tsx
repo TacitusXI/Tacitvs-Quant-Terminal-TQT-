@@ -30,7 +30,7 @@ const AVAILABLE_COMMANDS = [
   { cmd: "clear", desc: "Clear console history", usage: "clear" },
   { cmd: "status", desc: "Show system status", usage: "status" },
   { cmd: "mode", desc: "Switch data mode", usage: "mode [mock|live]" },
-  { cmd: "theme", desc: "Change visual theme", usage: "theme [blade|matrix|crimson|ocean|sunset]" },
+  { cmd: "theme", desc: "Change visual theme", usage: "theme [blade|matrix|inferno]" },
   { cmd: "arm", desc: "Set OPS mode to ARM", usage: "arm" },
   { cmd: "hold", desc: "Set OPS mode to HOLD", usage: "hold" },
   { cmd: "sim", desc: "Set OPS mode to SIM", usage: "sim" },
@@ -196,9 +196,6 @@ export default function CONSOLE() {
             const themeEmojis: Record<ThemeName, string> = {
               blade: "⚔️",
               matrix: "💚",
-              crimson: "🔴",
-              ocean: "🌊",
-              sunset: "🌅",
               inferno: "🔥",
             };
             
