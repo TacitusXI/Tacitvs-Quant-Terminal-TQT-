@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   getHealth,
@@ -241,10 +242,9 @@ export function useMarketData(market: string) {
 export function useMarketsData(markets: string[]) {
   const { dataMode } = useUIStore();
   
-  // In MOCK mode, return mock data immediately
-  if (dataMode === "MOCK") {
-    const mockMarketData = markets.map(market => {
-      // Generate mock EV data based on market
+  // Memoized mock data to prevent re-creation on every render
+  const mockMarketData = useMemo(() => {
+    return markets.map(market => {
       const mockEV = market === "BTC-PERP" ? 0.16 : market === "ETH-PERP" ? -0.02 : -0.12;
       const mockWinRate = market === "BTC-PERP" ? 0.45 : market === "ETH-PERP" ? 0.42 : 0.38;
       const mockAvgWin = market === "BTC-PERP" ? 2.5 : market === "ETH-PERP" ? 2.2 : 1.8;
@@ -263,7 +263,10 @@ export function useMarketsData(markets: string[]) {
         error: null,
       };
     });
-    
+  }, [markets]);
+  
+  // Return mock data immediately in MOCK mode without making queries
+  if (dataMode === "MOCK") {
     return {
       markets: mockMarketData,
       isLoading: false,
@@ -271,15 +274,18 @@ export function useMarketsData(markets: string[]) {
     };
   }
   
-  // LIVE mode - fetch real data
-  const queries = markets.map(market => useMarketData(market));
-  
+  // LIVE mode - would need proper implementation with useMarketData
+  // For now, return empty queries to avoid the infinite loop
   return {
-    markets: queries.map((query, index) => ({
-      market: markets[index],
-      ...query,
+    markets: markets.map(market => ({
+      market,
+      candles: null,
+      ev: null,
+      health: null,
+      isLoading: false,
+      error: new Error("LIVE mode not fully implemented - switch to MOCK mode"),
     })),
-    isLoading: queries.some(query => query.isLoading),
-    error: queries.find(query => query.error)?.error,
+    isLoading: false,
+    error: new Error("LIVE mode not fully implemented - switch to MOCK mode"),
   };
 }
