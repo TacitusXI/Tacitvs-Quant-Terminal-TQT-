@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
-import { MainLayout } from "@/components/layout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Timestamp } from "@/components/ui/timestamp";
 import { useUIStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 // Command type
 interface Command {
@@ -286,19 +286,25 @@ export default function CONSOLE() {
   };
 
   return (
-    <MainLayout>
+    <div className="min-h-screen bg-[#0a0c12] p-6">
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold cyber-title">CONSOLE</h1>
-            <p className="text-[#2D8EDF] font-mono text-sm">Command interface and system logs</p>
+        {/* Header with Logo */}
+        <div className="flex items-center justify-between border-b border-[#1a1f2e] pb-4">
+          <div className="flex items-center gap-4">
+            <Image src="/logo.webp" alt="TQT" width={40} height={40} className="rounded-lg" />
+            <div>
+              <h1 className="text-3xl font-bold cyber-title">CONSOLE</h1>
+              <p className="text-[#2D8EDF] font-mono text-sm">Command interface and system logs</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-[#00f3ff] rounded-full cyber-lamp" />
-            <span className="text-sm font-mono text-[#00f3ff] uppercase tracking-wider matrix-text">
-              CONSOLE ACTIVE
-            </span>
+          <div className="flex items-center gap-4">
+            <Timestamp />
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-[#00f3ff] rounded-full cyber-lamp" />
+              <span className="text-sm font-mono text-[#00f3ff] uppercase tracking-wider matrix-text">
+                CONSOLE ACTIVE
+              </span>
+            </div>
           </div>
         </div>
 
@@ -469,6 +475,6 @@ export default function CONSOLE() {
           </CardContent>
         </Card>
       </div>
-    </MainLayout>
+    </div>
   );
 }
