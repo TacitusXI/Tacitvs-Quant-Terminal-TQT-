@@ -7,6 +7,13 @@ pydantic>=2.6.0
 pandas>=2.2.0
 numpy>=1.26.0
 
+# HTTP requests
+requests>=2.31.0
+aiohttp>=3.9.0
+
+# Data storage
+pyarrow>=14.0.0  # Для Parquet
+
 # Опционально (для продакшена)
 python-dotenv>=1.0.0
 
