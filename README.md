@@ -2,9 +2,12 @@
 
 **Professional quant trading terminal** для perpetual DEX с EV-first подходом и venue-agnostic архитектурой.
 
-[![Week 1](https://img.shields.io/badge/Week%201-Complete-success)](docs/week-01/)
-[![Week 2](https://img.shields.io/badge/Week%202-In%20Progress-yellow)](docs/week-02/PLAN.md)
-[![Week 3](https://img.shields.io/badge/Week%203-Planned-lightgrey)](docs/week-03/PLAN.md)
+[![Week 1](https://img.shields.io/badge/Week%201-Complete-success)](docs/week-01/IMPLEMENTATION_SUMMARY.md)
+[![Week 2](https://img.shields.io/badge/Week%202-Complete-success)](docs/week-02/WEEK_02_PROGRESS.md)
+[![Week 3](https://img.shields.io/badge/Week%203-Complete-success)](docs/week-03/WEEK_03_PROGRESS.md)
+[![Week 4](https://img.shields.io/badge/Week%204-Complete-success)](docs/FRONTEND_DETAILED_PLAN.md)
+
+> 📊 **[→ PROJECT STATUS - Полный обзор работы](PROJECT_STATUS.md)** 📊
 
 ---
 
@@ -38,17 +41,28 @@ python tests/test_integration_demo.py
 - **FastAPI Backend** - 6 REST endpoints, Swagger docs
 - **Integration Demo** - Полный цикл: Signal → Sizing → EV → Decision
 
-### 🔄 Week 2 In Progress
-- **Hyperliquid Integration** - REST API adapter
-- **Data Pipeline** - Historical candles download & Parquet storage
-- **Real Data** - BTC/ETH 2 years (1d, 4h, 1h)
+### ✅ Week 2 Complete
+- **Hyperliquid Integration** - REST API client с retry logic
+- **Data Pipeline** - DataManager с кэшированием, Parquet storage
+- **Real Data** - BTC/ETH/SOL исторические данные (1d, 4h, 1h)
+- **38 Tests** - Unit + integration, 81% coverage
 
-### ⏳ Week 3 Planned
-- **Backtest Engine** - Realistic simulation
-- **Walk-Forward** - Out-of-sample validation
-- **Monte Carlo** - Risk metrics (VaR, P(ruin))
+### ✅ Week 3 Complete
+- **Backtest Engine** - Реалистичная симуляция с fees
+- **Walk-Forward** - OOS validation (rolling & anchored)
+- **Monte Carlo** - 1000+ permutations, percentile analysis
+- **Advanced Metrics** - Calmar, Sortino, VaR, CVaR
+- **Parameter Optimizer** - Grid search с overfitting protection
+- **Report Generator** - Markdown/HTML reports
+- **62+ Tests** - Research tools fully tested
 
-**Roadmap:** [Tacitus_Quant_Terminal_README.md](Tacitus_Quant_Terminal_README.md)
+### 🚧 Week 4 In Progress
+- **Frontend Development** - Sci-fi terminal UI (Next.js + TypeScript)
+- **Component Library** - Cards, Buttons, Charts, Lamps
+- **OPS Terminal** - Table Matrix, Controls, Ops Log
+- **LAB Terminal** - Backtest, Walk-Forward, Monte Carlo, Optimizer
+
+**Full Status:** [PROJECT_STATUS.md](PROJECT_STATUS.md)
 
 ---
 
@@ -171,11 +185,12 @@ tqt/
 | Week | Status | Deliverables |
 |------|--------|-------------|
 | **Week 1** | ✅ Complete | Strategy framework, EV, Risk, Demo |
-| **Week 2** | 🔄 In Progress | Hyperliquid API, Data pipeline, Real data |
-| **Week 3** | ⏳ Planned | Backtest, Walk-Forward, Monte Carlo |
-| **Week 4+** | 📋 Backlog | UI, Live trading, Multi-venue |
+| **Week 2** | ✅ Complete | Hyperliquid API, Data pipeline, Real data |
+| **Week 3** | ✅ Complete | Backtest, Walk-Forward, Monte Carlo, Optimizer |
+| **Week 4** | 🚧 In Progress | Frontend UI (OPS, LAB, METRICS, CONSOLE) |
+| **Week 5+** | 📋 Planned | Live trading, Multi-venue, Advanced features |
 
-**Детальный roadmap:** [Tacitus_Quant_Terminal_README.md](Tacitus_Quant_Terminal_README.md)
+**Детальный статус:** [PROJECT_STATUS.md](PROJECT_STATUS.md)
 
 ---
 
@@ -223,5 +238,19 @@ MIT (или на ваш выбор)
 
 ---
 
-**Last Updated:** Week 1 Complete (21 октября 2025)  
-**Next Milestone:** Week 2 - Data Integration (ETA: 5-7 days)
+**Last Updated:** Weeks 1-3 Complete (22 октября 2025)  
+**Next Milestone:** Week 4 - Frontend Integration (ETA: 10 days)
+
+---
+
+## 📖 Key Documentation
+
+### 🎯 Start Here:
+- **[PROJECT STATUS](PROJECT_STATUS.md)** - Полный обзор проделанной и предстоящей работы
+- **[QUICKSTART](docs/QUICKSTART.md)** - How to run everything
+- **[FRONTEND DETAILED PLAN](docs/FRONTEND_DETAILED_PLAN.md)** - UI specifications
+
+### 📚 Weekly Progress:
+- **Week 1:** [IMPLEMENTATION_SUMMARY](docs/week-01/IMPLEMENTATION_SUMMARY.md)
+- **Week 2:** [WEEK_02_PROGRESS](docs/week-02/WEEK_02_PROGRESS.md)
+- **Week 3:** [WEEK_03_PROGRESS](docs/week-03/WEEK_03_PROGRESS.md)
