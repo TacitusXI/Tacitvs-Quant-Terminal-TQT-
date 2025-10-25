@@ -20,6 +20,7 @@ export function MarketTile({ market }: MarketTileProps) {
   const { updateMarket } = useMarketStore();
 
   // Update market data when EV changes
+  // Only track EV value, not the entire object (to prevent infinite loops)
   useEffect(() => {
     if (marketData?.ev) {
       updateMarket(market, {
@@ -29,7 +30,9 @@ export function MarketTile({ market }: MarketTileProps) {
         lastUpdate: marketData.ev.timestamp,
       });
     }
-  }, [marketData?.ev, market, updateMarket]);
+    // Only re-run if EV value changes, not the object reference
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketData?.ev?.ev, marketData?.ev?.timestamp, market]);
 
   if (isLoading) {
     return (

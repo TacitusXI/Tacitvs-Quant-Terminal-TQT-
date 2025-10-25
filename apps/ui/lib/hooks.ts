@@ -238,6 +238,9 @@ export function useMarketData(market: string) {
   };
 }
 
+// Static timestamp for mock data (prevents re-creation)
+const MOCK_TIMESTAMP = 1730000000000;
+
 // Hook for multiple markets
 export function useMarketsData(markets: string[]) {
   const { dataMode } = useUIStore();
@@ -256,7 +259,7 @@ export function useMarketsData(markets: string[]) {
           ev: mockEV,
           winRate: mockWinRate,
           avgWin: mockAvgWin,
-          timestamp: Date.now(),
+          timestamp: MOCK_TIMESTAMP,
         },
         health: null,
         isLoading: false,
