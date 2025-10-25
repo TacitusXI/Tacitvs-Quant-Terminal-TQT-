@@ -326,6 +326,11 @@ export function applyTheme(theme: Theme) {
     root.style.setProperty('--glow-secondary', theme.colors.glowSecondary);
     root.style.setProperty('--glow-success', theme.colors.glowSuccess);
     root.style.setProperty('--glow-danger', theme.colors.glowDanger);
+    
+    // Calculate glow-ion from ion color
+    const ionColor = theme.colors.ion;
+    const ionGlow = `${ionColor}72`; // Add alpha
+    root.style.setProperty('--glow-ion', ionGlow);
 
     root.style.setProperty('--effect-glass-blur', theme.effects.glassBlur);
     root.style.setProperty('--effect-scanline-opacity', theme.effects.scanlineOpacity);
