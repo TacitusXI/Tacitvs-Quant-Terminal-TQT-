@@ -82,10 +82,12 @@ export function SkeletonCard({ className }: { className?: string }) {
 
 export function SkeletonChart({ 
   className,
-  height = 300 
+  height = 300,
+  shimmer = true
 }: { 
   className?: string;
   height?: number;
+  shimmer?: boolean;
 }) {
   // Fixed heights for consistent SSR/CSR rendering (no Math.random)
   const barHeights = [0.6, 0.8, 0.5, 0.7, 0.9, 0.4, 0.65, 0.75, 0.55, 0.85, 0.45, 0.7];
@@ -119,18 +121,20 @@ export function SkeletonChart({
 export function SkeletonTable({ 
   rows = 5,
   columns = 4,
-  className 
+  className,
+  shimmer = true
 }: { 
   rows?: number;
   columns?: number;
   className?: string;
+  shimmer?: boolean;
 }) {
   return (
     <div className={cn("cyber-card p-4", className)}>
       {/* Header */}
       <div className="flex gap-4 mb-4 pb-4 border-b border-[#1a1f2e]">
         {Array.from({ length: columns }).map((_, i) => (
-          <Skeleton key={i} className="flex-1" height={16} />
+          <Skeleton key={i} className="flex-1" height={16} shimmer={shimmer} />
         ))}
       </div>
       
@@ -143,6 +147,7 @@ export function SkeletonTable({
                 key={colIndex} 
                 className="flex-1" 
                 height={colIndex === 0 ? 24 : 16}
+                shimmer={shimmer}
               />
             ))}
           </div>
@@ -152,19 +157,19 @@ export function SkeletonTable({
   );
 }
 
-export function SkeletonMatrix({ className }: { className?: string }) {
+export function SkeletonMatrix({ className, shimmer = true }: { className?: string; shimmer?: boolean }) {
   return (
     <div className={cn("cyber-card", className)}>
       <div className="p-4 border-b border-[#1a1f2e]">
-        <Skeleton width={120} height={20} />
+        <Skeleton width={120} height={20} shimmer={shimmer} />
       </div>
       <div className="p-4">
         <div className="grid grid-cols-3 gap-2">
           {Array.from({ length: 9 }).map((_, i) => (
             <div key={i} className="p-3 bg-[#0a0a14] rounded-lg border border-[#1a1f2e]">
-              <Skeleton width={40} height={16} className="mb-2" />
-              <Skeleton width={60} height={20} className="mb-1" />
-              <Skeleton width={50} height={14} />
+              <Skeleton width={40} height={16} className="mb-2" shimmer={shimmer} />
+              <Skeleton width={60} height={20} className="mb-1" shimmer={shimmer} />
+              <Skeleton width={50} height={14} shimmer={shimmer} />
             </div>
           ))}
         </div>
