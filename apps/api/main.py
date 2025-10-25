@@ -139,6 +139,12 @@ app.add_middleware(
 # Глобальные объекты (в production будут в DI container или state)
 ev_calculator = EVCalculator(default_maker_bps=-1.5, default_taker_bps=4.5)
 
+# Data manager для работы с данными (импортируем здесь чтобы избежать циклических импортов)
+from core.data.manager import DataManager
+from core.backtest.engine import BacktestEngine
+
+data_manager = DataManager()
+
 
 # ===== ENDPOINTS =====
 
@@ -366,6 +372,196 @@ async def list_strategies():
             }
         ]
     }
+
+
+@app.get("/api/data/candles")
+async def get_candles(
+    market: str,
+    interval: str,
+    days_back: int = 30
+):
+    """
+    Получить исторические свечи для рынка.
+    
+    GET /api/data/candles?market=BTC-PERP&interval=1d&days_back=30
+    
+    Returns: Исторические OHLCV данные
+    """
+    try:
+        # Валидация interval
+        valid_intervals = ['1m', '5m', '15m', '1h', '4h', '1d']
+        if interval not in valid_intervals:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Invalid interval. Must be one of {valid_intervals}"
+            )
+        
+        # Загружаем данные через DataManager
+        df = data_manager.get_candles(
+            market=market,
+            interval=interval,
+            days_back=days_back
+        )
+        
+        if df is None or df.empty:
+            raise HTTPException(
+                status_code=404,
+                detail="No data available for this market"
+            )
+        
+        # Конвертируем DataFrame в JSON
+        candles = []
+        for _, row in df.iterrows():
+            candles.append({
+                "timestamp": int(row['timestamp'].timestamp() * 1000),
+                "open": float(row['open']),
+                "high": float(row['high']),
+                "low": float(row['low']),
+                "close": float(row['close']),
+                "volume": float(row['volume'])
+            })
+        
+        return {
+            "market": market,
+            "interval": interval,
+            "candles": candles,
+            "count": len(candles)
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/data/fetch")
+async def fetch_data(request: Dict[str, Any]):
+    """
+    Загрузить новые данные с Hyperliquid.
+    
+    POST /api/data/fetch
+    Body: { market, interval, days_back }
+    """
+    try:
+        market = request.get("market")
+        interval = request.get("interval", "1d")
+        days_back = request.get("days_back", 90)
+        
+        if not market:
+            raise HTTPException(
+                status_code=400,
+                detail="market is required"
+            )
+        
+        # Загружаем с force_refresh
+        df = data_manager.get_candles(
+            market=market,
+            interval=interval,
+            days_back=days_back,
+            force_refresh=True
+        )
+        
+        return {
+            "status": "success",
+            "market": market,
+            "interval": interval,
+            "candles_count": len(df)
+        }
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/backtest/strategies")
+async def get_backtest_strategies():
+    """
+    Получить список стратегий для backtesting.
+    
+    GET /api/backtest/strategies
+    """
+    return {
+        "strategies": [
+            {
+                "name": "tortoise",
+                "description": "Donchian breakout strategy",
+                "default_params": {
+                    "don_break": 20,
+                    "don_exit": 10
+                }
+            }
+        ]
+    }
+
+
+@app.post("/api/backtest/run")
+async def run_backtest(request: Dict[str, Any]):
+    """
+    Запустить backtest стратегии.
+    
+    POST /api/backtest/run
+    Body: { strategy, market, interval, days_back, params }
+    """
+    try:
+        strategy_name = request.get("strategy")
+        market = request.get("market")
+        interval = request.get("interval", "1d")
+        days_back = request.get("days_back", 90)
+        initial_capital = request.get("initial_capital", 10000.0)
+        risk_per_trade = request.get("risk_per_trade", 1.0)
+        params = request.get("params", {})
+        
+        # Валидация
+        if not strategy_name:
+            raise HTTPException(status_code=400, detail="strategy is required")
+        if not market:
+            raise HTTPException(status_code=400, detail="market is required")
+        
+        # Создаем стратегию
+        if strategy_name == "tortoise":
+            params['markets'] = [market]
+            strategy = TortoiseStrategy(params)
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unknown strategy: {strategy_name}"
+            )
+        
+        # Загружаем данные
+        df = data_manager.get_candles(
+            market=market,
+            interval=interval,
+            days_back=days_back
+        )
+        
+        if df is None or df.empty:
+            raise HTTPException(
+                status_code=404,
+                detail="No data available"
+            )
+        
+        # Создаем backtest engine
+        engine = BacktestEngine(
+            strategy=strategy,
+            initial_capital=initial_capital,
+            risk_per_trade=risk_per_trade
+        )
+        
+        # Запускаем backtest
+        results = engine.run_backtest(market, df)
+        
+        # Форматируем результаты для JSON
+        return {
+            "metrics": results['metrics'],
+            "equity_curve": results['equity_curve'],
+            "trades": results['trades']
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ===== STARTUP EVENT =====
