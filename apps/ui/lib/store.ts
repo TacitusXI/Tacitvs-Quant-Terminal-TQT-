@@ -3,6 +3,7 @@ import { create } from "zustand";
 // OPS Mode types
 export type OpsMode = "ARM" | "HOLD" | "SIM" | "OFF";
 export type RoutingMode = "maker" | "taker";
+export type DataMode = "MOCK" | "LIVE";
 
 // UI State interface
 interface UIState {
@@ -10,6 +11,9 @@ interface UIState {
   opsMode: OpsMode;
   riskPct: number;
   routing: RoutingMode;
+  
+  // Data Mode
+  dataMode: DataMode;
   
   // UI State
   paletteOpen: boolean;
@@ -19,14 +23,19 @@ interface UIState {
   backendConnected: boolean;
   lastHealthCheck: number;
   
+  // Command Palette
+  commandPaletteOpen: boolean;
+  
   // Actions
   setOpsMode: (mode: OpsMode) => void;
   setRiskPct: (pct: number) => void;
   setRouting: (mode: RoutingMode) => void;
+  setDataMode: (mode: DataMode) => void;
   togglePalette: () => void;
   setActivePage: (page: string) => void;
   setBackendConnected: (connected: boolean) => void;
   updateHealthCheck: () => void;
+  setCommandPaletteOpen: (open: boolean) => void;
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -34,19 +43,23 @@ export const useUIStore = create<UIState>((set) => ({
   opsMode: "SIM",
   riskPct: 1.0,
   routing: "maker",
+  dataMode: "MOCK", // Start with MOCK data for easier demo
   paletteOpen: false,
   activePage: "ops",
   backendConnected: false,
   lastHealthCheck: 0,
+  commandPaletteOpen: false,
   
   // Actions
   setOpsMode: (mode) => set({ opsMode: mode }),
   setRiskPct: (pct) => set({ riskPct: pct }),
   setRouting: (mode) => set({ routing: mode }),
+  setDataMode: (mode) => set({ dataMode: mode }),
   togglePalette: () => set((state) => ({ paletteOpen: !state.paletteOpen })),
   setActivePage: (page) => set({ activePage: page }),
   setBackendConnected: (connected) => set({ backendConnected: connected }),
   updateHealthCheck: () => set({ lastHealthCheck: Date.now() }),
+  setCommandPaletteOpen: (open) => set({ commandPaletteOpen: open }),
 }));
 
 // Market data interface

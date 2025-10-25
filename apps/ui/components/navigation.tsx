@@ -22,7 +22,7 @@ export function Navigation() {
   const router = useRouter();
   const pathname = usePathname();
   const { data: health } = useHealth();
-  const { setCommandPaletteOpen } = useUIStore();
+  const { setCommandPaletteOpen, dataMode } = useUIStore();
 
   const isConnected = health?.ok ?? false;
 
@@ -69,6 +69,16 @@ export function Navigation() {
 
           {/* Right Side - Far Right */}
           <div className="flex items-center gap-4 flex-shrink-0">
+            {/* Data Mode Indicator */}
+            <div className="flex items-center gap-2 px-2 py-1 rounded bg-[#1a1f2e]/50 border border-[#2a2f3e]">
+              <span className="text-xs">
+                {dataMode === "MOCK" ? "🎭" : "🔴"}
+              </span>
+              <span className="text-xs font-mono text-neutral-400">
+                {dataMode}
+              </span>
+            </div>
+
             {/* Backend Status */}
             <div className="flex items-center gap-2">
               <div

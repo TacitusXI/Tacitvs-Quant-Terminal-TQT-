@@ -28,6 +28,7 @@ const AVAILABLE_COMMANDS = [
   { cmd: "help", desc: "Show available commands", usage: "help" },
   { cmd: "clear", desc: "Clear console history", usage: "clear" },
   { cmd: "status", desc: "Show system status", usage: "status" },
+  { cmd: "mode", desc: "Switch data mode", usage: "mode [mock|live]" },
   { cmd: "arm", desc: "Set OPS mode to ARM", usage: "arm" },
   { cmd: "hold", desc: "Set OPS mode to HOLD", usage: "hold" },
   { cmd: "sim", desc: "Set OPS mode to SIM", usage: "sim" },
@@ -53,7 +54,7 @@ export default function CONSOLE() {
   
   const inputRef = useRef<HTMLInputElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
-  const { setOpsMode, opsMode, backendConnected } = useUIStore();
+  const { setOpsMode, opsMode, backendConnected, dataMode, setDataMode } = useUIStore();
 
   // Auto-scroll to bottom on new commands
   useEffect(() => {
@@ -123,10 +124,44 @@ export default function CONSOLE() {
           "=== SYSTEM STATUS ===",
           `Backend: ${backendConnected ? "✅ CONNECTED" : "❌ DISCONNECTED"}`,
           `OPS Mode: ${opsMode}`,
+          `Data Mode: ${dataMode} ${dataMode === "MOCK" ? "🎭" : "🔴"}`,
           `Active Markets: 6`,
           `Uptime: ${Math.floor(Math.random() * 24)}h ${Math.floor(Math.random() * 60)}m`,
         ];
         type = "success";
+        break;
+
+      case "mode":
+        if (args.length === 0) {
+          output = [
+            `Current data mode: ${dataMode}`,
+            "",
+            "Usage: mode [mock|live]",
+            "  mock - Use mock data for visualization only",
+            "  live - Use real data from backend API",
+          ];
+          type = "info";
+        } else {
+          const newMode = args[0].toUpperCase();
+          if (newMode === "MOCK" || newMode === "LIVE") {
+            setDataMode(newMode as "MOCK" | "LIVE");
+            output = [
+              `🔄 Data mode switched to ${newMode}`,
+              "",
+              newMode === "MOCK" 
+                ? "🎭 Using mock data - Safe for visualization and testing"
+                : "🔴 Using live data - Real market information from API",
+            ];
+            type = "success";
+            addSystemLog(`Data mode changed to ${newMode}`, newMode === "LIVE" ? "warning" : "info");
+          } else {
+            output = [
+              `Error: Invalid mode '${args[0]}'`,
+              "Valid modes: mock, live",
+            ];
+            type = "error";
+          }
+        }
         break;
 
       case "arm":
