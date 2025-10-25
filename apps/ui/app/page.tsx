@@ -1,103 +1,161 @@
-import Image from "next/image";
+/**
+ * 🧠 TACITVS QUANT TERMINAL - Dashboard
+ * Main terminal overview with system metrics
+ */
 
-export default function Home() {
+'use client';
+
+import React from 'react';
+import { Navigation } from '@/components/Navigation';
+import { TelemetryStrip } from '@/components/TelemetryStrip';
+import { CommandPalette } from '@/components/CommandPalette';
+import { DataPanel, MetricCell, GridMetrics } from '@/components/DataPanel';
+import { TacitvsLogo } from '@/components/TacitvsLogo';
+
+export default function Dashboard() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    <>
+      <CommandPalette />
+      <Navigation />
+      
+      <main className="min-h-screen pb-20 p-6 max-w-[1800px] mx-auto">
+        {/* Header */}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-mono font-bold text-[var(--accent)] glow-strong mb-2">
+              DASHBOARD
+            </h1>
+            <p className="text-sm font-mono text-[var(--fg)] opacity-60">
+              System Overview • Live Telemetry • EV Metrics
+            </p>
+          </div>
+          
+          <TacitvsLogo size={80} className="opacity-20" />
+        </div>
+        
+        {/* System Status */}
+        <DataPanel title="System Status" className="mb-6">
+          <GridMetrics
+            columns={4}
+            metrics={[
+              { label: 'EQUITY', value: '$10,000', status: 'ok', unit: '' },
+              { label: 'DAILY P&L', value: '+$247', status: 'ok', unit: '' },
+              { label: 'POSITIONS', value: '2', status: 'neutral', unit: '' },
+              { label: 'UTILIZATION', value: '18.5', status: 'ok', unit: '%' },
+            ]}
+          />
+        </DataPanel>
+        
+        {/* Risk Metrics */}
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          <DataPanel title="Risk Management" glow>
+            <GridMetrics
+              columns={2}
+              metrics={[
+                { label: 'DAILY LIMIT', value: '3', status: 'ok', unit: 'trades' },
+                { label: 'STOP LOSS', value: '2.5', status: 'ok', unit: '%' },
+                { label: 'MAX DRAWDOWN', value: '-$100', status: 'ok', unit: '' },
+                { label: 'RISK PER TRADE', value: '1.0', status: 'neutral', unit: '%' },
+              ]}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </DataPanel>
+          
+          <DataPanel title="Expected Value">
+            <GridMetrics
+              columns={2}
+              metrics={[
+                { label: 'AVG EV', value: '+0.57', status: 'ok', unit: 'R' },
+                { label: 'WIN RATE', value: '45', status: 'neutral', unit: '%' },
+                { label: 'AVG WIN', value: '+2.5', status: 'ok', unit: 'R' },
+                { label: 'AVG LOSS', value: '-1.0', status: 'neutral', unit: 'R' },
+              ]}
+            />
+          </DataPanel>
+        </div>
+        
+        {/* Active Markets */}
+        <DataPanel title="Active Markets" className="mb-6">
+          <div className="space-y-3">
+            {[
+              { market: 'BTC-PERP', price: '$45,230', change: '+2.4%', ev: '+0.16R', status: 'ok' as const },
+              { market: 'ETH-PERP', price: '$2,845', change: '+1.8%', ev: '+0.08R', status: 'warning' as const },
+              { market: 'SOL-PERP', price: '$98.50', change: '-0.5%', ev: '-0.02R', status: 'error' as const },
+            ].map((market) => (
+              <div 
+                key={market.market}
+                className="flex items-center justify-between p-3 bg-[var(--grid)] hover-glow transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-4">
+                  <span className="font-mono font-bold text-[var(--accent)]">
+                    {market.market}
+                  </span>
+                  <span className="font-mono text-[var(--fg)]">
+                    {market.price}
+                  </span>
+                  <span className={`font-mono text-sm status-${market.status}`}>
+                    {market.change}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className={`font-mono text-sm status-${market.status}`}>
+                    EV: {market.ev}
+                  </span>
+                  <div className={`w-2 h-2 rounded-full status-${market.status}`} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </DataPanel>
+        
+        {/* Recent Activity */}
+        <DataPanel title="Recent Activity">
+          <div className="font-mono text-xs space-y-2 text-[var(--fg)]">
+            <div className="flex items-center gap-3">
+              <span className="text-[var(--accent2)]">14:31:22Z</span>
+              <span>|</span>
+              <span className="text-[var(--accent)]">BTC-PERP</span>
+              <span>|</span>
+              <span>TORTOISE</span>
+              <span>|</span>
+              <span className="status-ok">ENTRY LONG</span>
+              <span>|</span>
+              <span>R=$120 EV=+0.16 maker</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[var(--accent2)]">14:28:15Z</span>
+              <span>|</span>
+              <span className="text-[var(--accent)]">ETH-PERP</span>
+              <span>|</span>
+              <span>TORTOISE</span>
+              <span>|</span>
+              <span className="status-ok">EXIT PROFIT</span>
+              <span>|</span>
+              <span>PnL=+$89 (+2.2R)</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[var(--accent2)]">14:15:08Z</span>
+              <span>|</span>
+              <span className="text-[var(--accent)]">SOL-PERP</span>
+              <span>|</span>
+              <span>TORTOISE</span>
+              <span>|</span>
+              <span className="status-error">STOP LOSS</span>
+              <span>|</span>
+              <span>PnL=-$40 (-1.0R)</span>
+            </div>
+          </div>
+        </DataPanel>
+        
+        {/* Shortcut Hint */}
+        <div className="mt-8 text-center">
+          <p className="text-xs font-mono text-[var(--fg)] opacity-40">
+            Press <span className="text-[var(--accent)]">⌘K</span> to open command palette
+          </p>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      
+      <TelemetryStrip />
+    </>
   );
 }
+

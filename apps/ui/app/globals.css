@@ -1,26 +1,172 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================
+   🧠 TACITVS QUANT TERMINAL
+   Retro Cyberpunk + Post-Military Industrial
+   ============================================ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+/* Base Theme Variables - Always Black */
+:root {
+  --bg: #000000;
+  --fg: #d0d0d0;
+  --grid: #101010;
+  --panel: #0b0b0b;
+  --border: #1a1a1a;
+  
+  /* Default theme: Matrix */
+  --accent: #00FF84;
+  --accent2: #00CC66;
+  --accent-rgb: 0, 255, 132;
+  
+  /* Typography */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Matrix Theme - Research / Simulation */
+html[data-theme="matrix"] {
+  --accent: #00FF84;
+  --accent2: #00CC66;
+  --accent-rgb: 0, 255, 132;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* BlackOps Theme - Execution / Risk Mode */
+html[data-theme="blackops"] {
+  --accent: #fe0174;
+  --accent2: #f82909;
+  --accent-rgb: 254, 1, 116;
 }
+
+/* Neon Theme - Post-Analysis / Reporting */
+html[data-theme="neon"] {
+  --accent: #319ff8;
+  --accent2: #422d94;
+  --accent-rgb: 49, 159, 248;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-grid: var(--grid);
+  --color-panel: var(--panel);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent2: var(--accent2);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Global Body Styles */
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--grid);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent2);
+}
+
+/* Selection Styling */
+::selection {
+  background: rgba(var(--accent-rgb), 0.3);
+  color: var(--accent);
+}
+
+/* Monospace Numbers for Data */
+.mono-num {
+  font-family: var(--font-mono), 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Glow Effects */
+.glow {
+  text-shadow: 0 0 6px var(--accent);
+}
+
+.glow-strong {
+  text-shadow: 0 0 12px var(--accent), 0 0 24px var(--accent);
+}
+
+.border-glow {
+  box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.4);
+}
+
+/* Hover States */
+.hover-glow {
+  transition: all 0.2s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 6px rgba(var(--accent-rgb), 0.6);
+}
+
+/* Focus States */
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Panel Base */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+/* Grid Background */
+.grid-bg {
+  background-image: 
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Animations */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* Data Metrics */
+.metric-cell {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  text-shadow: 0 0 4px rgba(var(--accent-rgb), 0.3);
+}
+
+/* Status Colors */
+.status-ok { color: #00FF84; }
+.status-warning { color: #FFB800; }
+.status-error { color: #fe0174; }
+.status-neutral { color: #d0d0d0; }
