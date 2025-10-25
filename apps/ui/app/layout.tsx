@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { CommandPalette } from "@/components/command-palette";
 import { ErrorBoundary } from "@/components/error-boundary";
 
@@ -41,8 +42,10 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <QueryProvider>
-            <CommandPalette />
-            {children}
+            <ThemeProvider>
+              <CommandPalette />
+              {children}
+            </ThemeProvider>
           </QueryProvider>
         </ErrorBoundary>
       </body>

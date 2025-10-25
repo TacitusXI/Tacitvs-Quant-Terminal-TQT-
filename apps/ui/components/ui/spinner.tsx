@@ -21,11 +21,11 @@ export function Spinner({
   };
 
   const colorClasses = {
-    purple: "border-[#6243DD] border-t-transparent",
-    cyan: "border-[#2D8EDF] border-t-transparent",
+    purple: "border-[var(--color-primary)] border-t-transparent",
+    cyan: "border-[var(--color-secondary)] border-t-transparent",
     white: "border-white border-t-transparent",
-    ion: "border-[#8AFF00] border-t-transparent",
-    magenta: "border-[#FF2E88] border-t-transparent",
+    ion: "border-[var(--color-ion)] border-t-transparent",
+    magenta: "border-[var(--color-shock)] border-t-transparent",
   };
 
   return (
@@ -56,7 +56,7 @@ export function SpinnerOverlay({
     )}>
       <Spinner size="lg" color="cyan" />
       {message && (
-        <div className="mt-4 text-[#2D8EDF] font-mono text-sm animate-pulse">
+        <div className="mt-4 text-[var(--color-secondary)] font-mono text-sm animate-pulse">
           {message}
         </div>
       )}
@@ -77,11 +77,11 @@ export function SpinnerDots({
   };
 
   const dotColors = {
-    purple: "bg-[#6243DD]",
-    cyan: "bg-[#2D8EDF]",
+    purple: "bg-[var(--color-primary)]",
+    cyan: "bg-[var(--color-secondary)]",
     white: "bg-white",
-    ion: "bg-[#8AFF00]",
-    magenta: "bg-[#FF2E88]",
+    ion: "bg-[var(--color-ion)]",
+    magenta: "bg-[var(--color-shock)]",
   };
 
   return (
@@ -127,11 +127,11 @@ export function SpinnerPulse({
   };
 
   const colorClasses = {
-    purple: "bg-[#6243DD]",
-    cyan: "bg-[#2D8EDF]",
+    purple: "bg-[var(--color-primary)]",
+    cyan: "bg-[var(--color-secondary)]",
     white: "bg-white",
-    ion: "bg-[#8AFF00]",
-    magenta: "bg-[#FF2E88]",
+    ion: "bg-[var(--color-ion)]",
+    magenta: "bg-[var(--color-shock)]",
   };
 
   return (

@@ -31,7 +31,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
             type="range"
             className={cn(
               "w-full h-1 bg-neutral-800 rounded-lg appearance-none cursor-pointer",
-              "focus:outline-none focus:ring-2 focus:ring-[#2D8EDF] focus:ring-offset-2 focus:ring-offset-[#0a0b0e]",
+              "focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)] focus:ring-offset-2 focus:ring-offset-[#0a0b0e]",
               "slider-thumb",
               className
             )}

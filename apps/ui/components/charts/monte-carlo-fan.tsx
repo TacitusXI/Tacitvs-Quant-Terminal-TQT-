@@ -109,7 +109,7 @@ function MonteCarloFanChartInner({ data, height = 300, className, isLoading = fa
               <Line
                 type="monotone"
                 dataKey="p5"
-                stroke="#f43f5e"
+                stroke="var(--color-danger)"
                 strokeWidth={1}
                 strokeDasharray="2 2"
                 dot={false}
@@ -152,7 +152,7 @@ function MonteCarloFanChartInner({ data, height = 300, className, isLoading = fa
               <Line
                 type="monotone"
                 dataKey="p95"
-                stroke="#2D8EDF"
+                stroke="var(--color-secondary)"
                 strokeWidth={1}
                 strokeDasharray="2 2"
                 dot={false}

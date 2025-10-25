@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Timestamp } from "@/components/ui/timestamp";
 import { useUIStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { getTheme, getThemeNames, applyTheme, type ThemeName } from "@/lib/themes";
 
 // Command type
 interface Command {
@@ -29,6 +30,7 @@ const AVAILABLE_COMMANDS = [
   { cmd: "clear", desc: "Clear console history", usage: "clear" },
   { cmd: "status", desc: "Show system status", usage: "status" },
   { cmd: "mode", desc: "Switch data mode", usage: "mode [mock|live]" },
+  { cmd: "theme", desc: "Change visual theme", usage: "theme [blade|matrix|crimson|ocean|sunset]" },
   { cmd: "arm", desc: "Set OPS mode to ARM", usage: "arm" },
   { cmd: "hold", desc: "Set OPS mode to HOLD", usage: "hold" },
   { cmd: "sim", desc: "Set OPS mode to SIM", usage: "sim" },
@@ -54,7 +56,7 @@ export default function CONSOLE() {
   
   const inputRef = useRef<HTMLInputElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
-  const { setOpsMode, opsMode, backendConnected, dataMode, setDataMode } = useUIStore();
+  const { setOpsMode, opsMode, backendConnected, dataMode, setDataMode, currentTheme, setTheme } = useUIStore();
 
   // Auto-scroll to bottom on new commands
   useEffect(() => {
@@ -120,11 +122,13 @@ export default function CONSOLE() {
         break;
 
       case "status":
+        const theme = getTheme(currentTheme);
         output = [
           "=== SYSTEM STATUS ===",
           `Backend: ${backendConnected ? "✅ CONNECTED" : "❌ DISCONNECTED"}`,
           `OPS Mode: ${opsMode}`,
           `Data Mode: ${dataMode} ${dataMode === "MOCK" ? "🎭" : "🔴"}`,
+          `Theme: ${theme.displayName} (${currentTheme})`,
           `Active Markets: 6`,
           `Uptime: ${Math.floor(Math.random() * 24)}h ${Math.floor(Math.random() * 60)}m`,
         ];
@@ -158,6 +162,58 @@ export default function CONSOLE() {
             output = [
               `Error: Invalid mode '${args[0]}'`,
               "Valid modes: mock, live",
+            ];
+            type = "error";
+          }
+        }
+        break;
+
+      case "theme":
+        if (args.length === 0) {
+          const availableThemes = getThemeNames();
+          output = [
+            `Current theme: ${currentTheme}`,
+            "",
+            "Available themes:",
+            ...availableThemes.map(t => {
+              const theme = getTheme(t);
+              const indicator = t === currentTheme ? "✓" : " ";
+              return `  ${indicator} ${t.padEnd(10)} - ${theme.displayName} (${theme.description})`;
+            }),
+            "",
+            "Usage: theme <name>",
+          ];
+          type = "info";
+        } else {
+          const newTheme = args[0].toLowerCase() as ThemeName;
+          const availableThemes = getThemeNames();
+          
+          if (availableThemes.includes(newTheme)) {
+            const theme = getTheme(newTheme);
+            applyTheme(theme);
+            setTheme(newTheme);
+            
+            const themeEmojis: Record<ThemeName, string> = {
+              blade: "⚔️",
+              matrix: "💚",
+              crimson: "🔴",
+              ocean: "🌊",
+              sunset: "🌅",
+            };
+            
+            output = [
+              `${themeEmojis[newTheme]} Theme changed to: ${theme.displayName}`,
+              `   ${theme.description}`,
+              "",
+              "All UI colors and effects have been updated.",
+            ];
+            type = "success";
+            addSystemLog(`Theme changed to ${theme.displayName}`, "info");
+          } else {
+            output = [
+              `Error: Unknown theme '${args[0]}'`,
+              "",
+              "Available themes: " + availableThemes.join(", "),
             ];
             type = "error";
           }
@@ -327,11 +383,11 @@ export default function CONSOLE() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold cyber-title">CONSOLE</h1>
-            <p className="text-[#2D8EDF] font-mono text-sm">Command interface and system logs</p>
+            <p className="text-[var(--color-secondary)] font-mono text-sm">Command interface and system logs</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-[#00f3ff] rounded-full cyber-lamp" />
-            <span className="text-sm font-mono text-[#00f3ff] uppercase tracking-wider matrix-text">
+            <div className="w-3 h-3 bg-[var(--color-electric)] rounded-full cyber-lamp" />
+            <span className="text-sm font-mono text-[var(--color-electric)] uppercase tracking-wider matrix-text">
               CONSOLE ACTIVE
             </span>
           </div>
@@ -375,7 +431,7 @@ export default function CONSOLE() {
                 <div key={idx} className="space-y-1">
                   {/* Input line */}
                   <div className="flex items-center gap-2">
-                    <span className="text-[#2D8EDF]">{'>'}</span>
+                    <span className="text-[var(--color-secondary)]">{'>'}</span>
                     <span className="text-neutral-300">{cmd.input}</span>
                     <span className="text-neutral-600 text-xs ml-auto">
                       <Timestamp timestamp={cmd.timestamp} />
@@ -385,9 +441,9 @@ export default function CONSOLE() {
                   {/* Output lines */}
                   <div className={cn(
                     "ml-4 space-y-1",
-                    cmd.type === "success" && "text-[#16A34A]",
-                    cmd.type === "error" && "text-[#F43F5E]",
-                    cmd.type === "info" && "text-[#7FB7FF]"
+                    cmd.type === "success" && "text-[var(--color-success)]",
+                    cmd.type === "error" && "text-[var(--color-danger)]",
+                    cmd.type === "info" && "text-[var(--color-accent-light)]"
                   )}>
                     {cmd.output.map((line, lineIdx) => (
                       <div key={lineIdx}>{line}</div>
@@ -399,22 +455,22 @@ export default function CONSOLE() {
               {commands.length === 0 && (
                 <div className="text-neutral-500 text-center py-8">
                   <div className="mb-2">Welcome to Tacitus Quant Terminal Console</div>
-                  <div className="text-xs">Type <span className="text-[#2D8EDF]">/help</span> or press <span className="text-[#2D8EDF]">Tab</span> for commands</div>
+                  <div className="text-xs">Type <span className="text-[var(--color-secondary)]">/help</span> or press <span className="text-[var(--color-secondary)]">Tab</span> for commands</div>
                 </div>
               )}
             </div>
 
             {/* Autocomplete Suggestions */}
             {suggestions.length > 0 && (
-              <div className="mb-2 bg-[#0a0a14] border border-[#6243DD] rounded-lg p-2 space-y-1">
+              <div className="mb-2 bg-[#0a0a14] border border-[var(--color-primary)] rounded-lg p-2 space-y-1">
                 {suggestions.map((suggestion, idx) => (
                   <div
                     key={idx}
                     className={cn(
                       "px-3 py-1 rounded font-mono text-sm cursor-pointer transition-colors",
                       idx === selectedSuggestion
-                        ? "bg-[#6243DD] text-white"
-                        : "text-[#2D8EDF] hover:bg-[#6243DD]/20"
+                        ? "bg-[var(--color-primary)] text-white"
+                        : "text-[var(--color-secondary)] hover:bg-[var(--color-primary)]/20"
                     )}
                     onClick={() => {
                       setInput(suggestion);
@@ -429,8 +485,8 @@ export default function CONSOLE() {
             )}
 
             {/* Input Line */}
-            <div className="flex items-center gap-2 bg-[#050508] p-3 rounded-lg border border-[#6243DD]/50 focus-within:border-[#2D8EDF]">
-              <span className="text-[#2D8EDF] font-mono">{'>'}</span>
+            <div className="flex items-center gap-2 bg-[#050508] p-3 rounded-lg border border-[var(--color-primary)]/50 focus-within:border-[var(--color-secondary)]">
+              <span className="text-[var(--color-secondary)] font-mono">{'>'}</span>
               <input
                 ref={inputRef}
                 type="text"
@@ -440,7 +496,7 @@ export default function CONSOLE() {
                 placeholder="Type / for commands or press Tab..."
                 className="flex-1 bg-transparent border-none outline-none text-neutral-200 font-mono placeholder:text-neutral-600"
               />
-              <span className="text-[#2D8EDF] font-mono animate-pulse">█</span>
+              <span className="text-[var(--color-secondary)] font-mono animate-pulse">█</span>
             </div>
 
             {/* Hints */}
@@ -481,10 +537,10 @@ export default function CONSOLE() {
                 systemLogs.map((log, idx) => (
                   <div key={idx} className="flex items-start gap-2 pb-2 border-b border-neutral-800">
                     <span className={cn(
-                      log.type === "success" && "text-[#16A34A]",
-                      log.type === "warning" && "text-[#FFB020]",
-                      log.type === "info" && "text-[#7FB7FF]",
-                      log.type === "error" && "text-[#F43F5E]"
+                      log.type === "success" && "text-[var(--color-success)]",
+                      log.type === "warning" && "text-[var(--color-warning)]",
+                      log.type === "info" && "text-[var(--color-accent-light)]",
+                      log.type === "error" && "text-[var(--color-danger)]"
                     )}>
                       {log.type === "success" && "✓"}
                       {log.type === "warning" && "⚠"}

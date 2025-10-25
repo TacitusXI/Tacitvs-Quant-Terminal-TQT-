@@ -183,6 +183,19 @@
   - Jest + React Testing Library
   - Coverage: 100% for utils
 
+- ✅ **Data Mode Switching**
+  - MOCK mode (visualization without backend)
+  - LIVE mode (real API data)
+  - Console command: `mode [mock|live]`
+  - Visual indicator in navigation bar
+
+- ✅ **Theming System** (`apps/ui/lib/themes.ts`)
+  - 5 pre-built themes (Blade, Matrix, Crimson, Ocean, Sunset)
+  - Console command: `theme <name>`
+  - CSS variable system
+  - Persistent theme storage
+  - Dynamic color switching
+
 **Результат:** Full-featured sci-fi terminal UI готов! 🚀
 
 ---
@@ -214,10 +227,12 @@
 - Overfitting protection
 
 ### 5. Modern UI/UX
-- Sci-fi terminal aesthetic
+- Sci-fi terminal aesthetic (5 themes)
 - Real-time data updates
 - Keyboard-first navigation
 - Responsive design
+- MOCK/LIVE data modes
+- Dynamic theming system
 
 ---
 
@@ -323,6 +338,8 @@
 - **[API Reference](docs/api/API_REFERENCE.md)** - REST API
 - **[Strategy Framework](docs/strategies/STRATEGY_FRAMEWORK.md)** - Создание стратегий
 - **[Project Structure](docs/PROJECT_STRUCTURE.md)** - Архитектура
+- **[Terminals Guide](docs/TERMINALS_GUIDE.md)** - OPS/LAB/METRICS/CONSOLE функционал
+- **[Theming Guide](docs/THEMING_GUIDE.md)** - Система тем и кастомизация
 
 ---
 

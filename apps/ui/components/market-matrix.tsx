@@ -110,8 +110,8 @@ export function MarketTile({ market }: MarketTileProps) {
           <div>
             <span className="text-neutral-500">Status: </span>
             <span className={
-              status === "ARMED" ? "text-[#8AFF00]" :
-              status === "HOLD" ? "text-[#FFB020]" :
+              status === "ARMED" ? "text-[var(--color-ion)]" :
+              status === "HOLD" ? "text-[var(--color-warning)]" :
               "text-neutral-600"
             }>
               {status}

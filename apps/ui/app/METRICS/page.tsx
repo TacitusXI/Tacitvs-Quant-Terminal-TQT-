@@ -12,11 +12,11 @@ export default function METRICS() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold cyber-title">METRICS Dashboard</h1>
-            <p className="text-[#2D8EDF] font-mono text-sm">Key performance indicators and risk monitoring</p>
+            <p className="text-[var(--color-secondary)] font-mono text-sm">Key performance indicators and risk monitoring</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-[#16A34A] rounded-full cyber-lamp" />
-            <span className="text-sm font-mono text-[#16A34A] uppercase tracking-wider">MONITORING ACTIVE</span>
+            <div className="w-3 h-3 bg-[var(--color-success)] rounded-full cyber-lamp" />
+            <span className="text-sm font-mono text-[var(--color-success)] uppercase tracking-wider">MONITORING ACTIVE</span>
           </div>
         </div>
 
@@ -70,15 +70,15 @@ export default function METRICS() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>BTC: 40%</span>
-                  <span className="text-[#16A34A]">+5.2R</span>
+                  <span className="text-[var(--color-success)]">+5.2R</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>ETH: 30%</span>
-                  <span className="text-[#F43F5E]">-1.3R</span>
+                  <span className="text-[var(--color-danger)]">-1.3R</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>SOL: 20%</span>
-                  <span className="text-[#16A34A]">+2.1R</span>
+                  <span className="text-[var(--color-success)]">+2.1R</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Cash: 10%</span>

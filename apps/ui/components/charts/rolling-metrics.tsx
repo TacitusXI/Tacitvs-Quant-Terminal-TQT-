@@ -86,7 +86,7 @@ function RollingMetricsInner({ data, height = 300, className, isLoading = false 
               <Line
                 type="monotone"
                 dataKey="sharpe"
-                stroke="#2D8EDF"
+                stroke="var(--color-secondary)"
                 strokeWidth={2}
                 dot={false}
                 name="Sharpe"
@@ -110,7 +110,7 @@ function RollingMetricsInner({ data, height = 300, className, isLoading = false 
               <Line
                 type="monotone"
                 dataKey="sortino"
-                stroke="#f43f5e"
+                stroke="var(--color-danger)"
                 strokeWidth={2}
                 dot={false}
                 name="Sortino"

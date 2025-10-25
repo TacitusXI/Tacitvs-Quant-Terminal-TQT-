@@ -6,34 +6,58 @@
    ============================================ */
 
 :root {
-  /* === THE BLADE: Core Colors === */
-  --neon-purple: #6243DD;      /* Violet core - intelligence, premium */
-  --neon-cyan: #2D8EDF;        /* Cyber blue - reliability, tech */
-  --neon-blue: #00f3ff;        /* Electric accent - energy */
+  /* === THEME COLORS (Dynamic - set by ThemeProvider) === */
+  --color-primary: #6243DD;
+  --color-secondary: #2D8EDF;
+  --color-accent: #8B5CF6;
+  --color-ion: #8AFF00;
+  --color-shock: #F43F5E;
+  --color-void-black: #0a0c12;
+  --color-deep-space: #0e1117;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-success: #16A34A;
+  --color-warning: #FFB020;
+  --color-danger: #F43F5E;
+  --color-info: #2D8EDF;
+  --glow-primary: rgba(98, 67, 221, 0.6);
+  --glow-secondary: rgba(45, 142, 223, 0.6);
+  --glow-success: rgba(22, 163, 74, 0.6);
+  --glow-danger: rgba(244, 63, 94, 0.6);
+  --effect-glass-blur: 12px;
+  --effect-scanline-opacity: 0.03;
   
-  /* === THE STEEL: Base Colors === */
-  --void-black: #0a0b0e;       /* Gunmetal background */
-  --deep-space: #0a0a14;       /* Card backgrounds */
-  --abyss: #050508;            /* Deepest shadows */
-  --border-steel: #1b2230;     /* Metal borders */
-  --grid-color: rgba(98, 67, 221, 0.08); /* Subtle grid */
+  /* === EXTENDED COLORS (derived from theme) === */
+  --color-accent-light: #7FB7FF;
+  --color-success-bright: #22c55e;
+  --color-warning-bright: #fbbf24;
+  --color-danger-light: #f87171;
+  --color-electric: #00f3ff;
   
-  /* === THE EDGE: Rare Accents (≤5% usage) === */
-  --ion-green: #8AFF00;        /* Laser precision - critical wins */
-  --magenta-shock: #FF2E88;    /* Alert state - danger zones */
-  --amber-forge: #FFB020;      /* Warm metal - important CTA */
-  
-  /* === TRADING SIGNALS: Status Colors === */
-  --success-emerald: #16A34A;  /* Profitable, EV > 0.05R */
-  --warning-amber: #FFB020;    /* Caution, EV 0-0.05R */
-  --danger-rose: #F43F5E;      /* Loss, EV < 0R */
-  --info-cyan: #7FB7FF;        /* Information, neutral */
-  
-  /* === GLOWS & SHADOWS === */
-  --glow-purple: rgba(98, 67, 221, 0.6);
-  --glow-cyan: rgba(45, 142, 223, 0.6);
+  /* === LEGACY ALIASES (for backward compatibility) === */
+  --neon-purple: var(--color-primary);
+  --neon-cyan: var(--color-secondary);
+  --neon-blue: #00f3ff;
+  --void-black: var(--color-void-black);
+  --deep-space: var(--color-deep-space);
+  --abyss: #050508;
+  --border-steel: #1b2230;
+  --grid-color: rgba(98, 67, 221, 0.08);
+  --ion-green: var(--color-ion);
+  --magenta-shock: var(--color-shock);
+  --amber-forge: var(--color-warning);
+  --success-emerald: var(--color-success);
+  --warning-amber: var(--color-warning);
+  --danger-rose: var(--color-danger);
+  --info-cyan: var(--color-info);
+  --glow-purple: var(--glow-primary);
+  --glow-cyan: var(--glow-secondary);
   --glow-ion: rgba(138, 255, 0, 0.45);
-  --glow-magenta: rgba(255, 46, 136, 0.5);
+  --glow-magenta: var(--glow-danger);
 }
 
 @layer base {

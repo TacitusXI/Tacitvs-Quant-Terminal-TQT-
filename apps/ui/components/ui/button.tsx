@@ -18,11 +18,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           "cyber-btn relative inline-flex items-center justify-center rounded-lg font-bold uppercase tracking-wider disabled:pointer-events-none disabled:opacity-50",
           {
             // Variants - Silent Blade palette
-            "border-[#6243DD] text-[#2D8EDF] hover:border-[#2D8EDF] hover:text-white": variant === "primary",
-            "border-[#16A34A] text-[#16A34A] hover:border-[#22c55e] hover:text-white": variant === "success",
-            "border-[#FFB020] text-[#FFB020] hover:border-[#fbbf24] hover:text-white": variant === "warning",
-            "border-[#F43F5E] text-[#F43F5E] hover:border-[#f87171] hover:text-white": variant === "danger",
-            "border-transparent text-[#2D8EDF] hover:border-[#6243DD]/30 hover:bg-[#0a0a14]/50": variant === "ghost",
+            "border-[var(--color-primary)] text-[var(--color-secondary)] hover:border-[var(--color-secondary)] hover:text-white": variant === "primary",
+            "border-[var(--color-success)] text-[var(--color-success)] hover:border-[var(--color-success-bright)] hover:text-white": variant === "success",
+            "border-[var(--color-warning)] text-[var(--color-warning)] hover:border-[var(--color-warning-bright)] hover:text-white": variant === "warning",
+            "border-[var(--color-danger)] text-[var(--color-danger)] hover:border-[var(--color-danger-light)] hover:text-white": variant === "danger",
+            "border-transparent text-[var(--color-secondary)] hover:border-[var(--color-primary)]/30 hover:bg-[#0a0a14]/50": variant === "ghost",
             
             // Sizes
             "h-8 px-3 text-xs": size === "sm",

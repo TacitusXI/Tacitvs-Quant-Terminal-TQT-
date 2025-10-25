@@ -87,10 +87,10 @@ function EquityCurveInner({ data, height = 300, className, isLoading = false }: 
               <Line
                 type="monotone"
                 dataKey="equity"
-                stroke="#2D8EDF"
+                stroke="var(--color-secondary)"
                 strokeWidth={2}
-                dot={{ fill: "#2D8EDF", strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, stroke: "#2D8EDF", strokeWidth: 2 }}
+                dot={{ fill: "var(--color-secondary)", strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: "var(--color-secondary)", strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>

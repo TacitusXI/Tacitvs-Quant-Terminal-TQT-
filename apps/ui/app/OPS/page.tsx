@@ -30,18 +30,18 @@ export default function OPS() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold cyber-title">OPS Terminal</h1>
-            <p className="text-[#2D8EDF] font-mono text-sm">Live trading operations and monitoring</p>
+            <p className="text-[var(--color-secondary)] font-mono text-sm">Live trading operations and monitoring</p>
           </div>
           <div className="flex items-center gap-2">
             {opsMode === "ARM" ? (
               <>
-                <div className="w-3 h-3 bg-[#8AFF00] rounded-full neon-glow-ion animate-pulse" />
+                <div className="w-3 h-3 bg-[var(--color-ion)] rounded-full neon-glow-ion animate-pulse" />
                 <span className="text-sm font-mono text-ion uppercase tracking-wider">⚡ ARMED</span>
               </>
             ) : (
               <>
-                <div className="w-3 h-3 bg-[#16A34A] rounded-full cyber-lamp" />
-                <span className="text-sm font-mono text-[#16A34A] uppercase tracking-wider">SYSTEM ACTIVE</span>
+                <div className="w-3 h-3 bg-[var(--color-success)] rounded-full cyber-lamp" />
+                <span className="text-sm font-mono text-[var(--color-success)] uppercase tracking-wider">SYSTEM ACTIVE</span>
               </>
             )}
           </div>
@@ -77,7 +77,7 @@ export default function OPS() {
                         onClick={() => setOpsMode(mode.id)}
                         className={cn(
                           "relative",
-                          mode.id === "ARM" && opsMode === "ARM" && "border-[#8AFF00] text-[#8AFF00] neon-glow-ion"
+                          mode.id === "ARM" && opsMode === "ARM" && "border-[var(--color-ion)] text-[var(--color-ion)] neon-glow-ion"
                         )}
                       >
                         {mode.id === "ARM" && "⚡ "}
@@ -117,7 +117,7 @@ export default function OPS() {
                         name="routing"
                         checked={routing === "maker"}
                         onChange={() => setRouting("maker")}
-                        className="w-4 h-4 text-[#2D8EDF]"
+                        className="w-4 h-4 text-[var(--color-secondary)]"
                       />
                       <span className="text-sm text-neutral-300">Maker (rebates)</span>
                     </label>
@@ -127,7 +127,7 @@ export default function OPS() {
                         name="routing"
                         checked={routing === "taker"}
                         onChange={() => setRouting("taker")}
-                        className="w-4 h-4 text-[#2D8EDF]"
+                        className="w-4 h-4 text-[var(--color-secondary)]"
                       />
                       <span className="text-sm text-neutral-300">Taker (fast fill)</span>
                     </label>
@@ -196,14 +196,14 @@ export default function OPS() {
                         className="text-neutral-500"
                       />
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[#2D8EDF]">{entry.market}</span>
+                        <span className="text-[var(--color-secondary)]">{entry.market}</span>
                         <span className="text-neutral-400">{entry.strategy}</span>
                       </div>
                       <div className={`mt-1 ${
-                        entry.action === "ENTRY" ? "text-[#16A34A]" :
-                        entry.action === "EXIT" ? "text-[#7FB7FF]" :
-                        entry.action === "HOLD" ? "text-[#FFB020]" :
-                        "text-[#F43F5E]"
+                        entry.action === "ENTRY" ? "text-[var(--color-success)]" :
+                        entry.action === "EXIT" ? "text-[var(--color-accent-light)]" :
+                        entry.action === "HOLD" ? "text-[var(--color-warning)]" :
+                        "text-[var(--color-danger)]"
                       }`}>
                         {entry.message}
                       </div>

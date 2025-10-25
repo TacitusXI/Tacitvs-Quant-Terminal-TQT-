@@ -29,7 +29,7 @@ export function Card({
         {
           "neon-glow-cyan": glow && variant === "standard",
           "neon-glow-purple": variant === "elevated",
-          "border-[#8AFF00]/40": variant === "critical", // Ion green for critical cards
+          "border-[var(--color-ion)]/40": variant === "critical", // Ion green for critical cards
         },
         className
       )}

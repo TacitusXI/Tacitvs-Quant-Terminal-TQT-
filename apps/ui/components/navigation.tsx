@@ -41,7 +41,7 @@ export function Navigation() {
                 className="object-contain group-hover:scale-110 transition-transform"
               />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-[#6243DD] to-[#2D8EDF] bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
               TQT
             </span>
           </Link>
@@ -55,8 +55,8 @@ export function Navigation() {
                 className={cn(
                   "px-4 py-2 rounded-lg font-medium text-sm transition-all relative group",
                   pathname === `/${item.label}`
-                    ? "bg-[#6243DD]/20 text-[#2D8EDF] border border-[#6243DD]/50 neon-glow-cyan"
-                    : "text-neutral-400 hover:text-[#2D8EDF] hover:bg-[#1a1f2e]"
+                    ? "bg-[var(--color-primary)]/20 text-[var(--color-secondary)] border border-[var(--color-primary)]/50 neon-glow-cyan"
+                    : "text-neutral-400 hover:text-[var(--color-secondary)] hover:bg-[#1a1f2e]"
                 )}
               >
                 {item.label}
@@ -86,7 +86,7 @@ export function Navigation() {
                   "w-2 h-2 rounded-full",
                   isConnected
                     ? "bg-[#16A34A] shadow-[0_0_8px_rgba(22,163,74,0.6)]"
-                    : "bg-[#F43F5E] shadow-[0_0_8px_rgba(244,63,94,0.6)]"
+                    : "bg-[var(--color-danger)] shadow-[0_0_8px_var(--glow-danger)]"
                 )}
               />
               <span className="text-xs text-neutral-500">
@@ -95,20 +95,20 @@ export function Navigation() {
             </div>
 
             {/* Notifications */}
-            <button className="text-neutral-500 hover:text-[#2D8EDF] transition-colors relative">
+            <button className="text-neutral-500 hover:text-[var(--color-secondary)] transition-colors relative">
               🔔
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#F43F5E] rounded-full" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 bg-[var(--color-danger)] rounded-full" />
             </button>
 
             {/* Settings */}
-            <button className="text-neutral-500 hover:text-[#2D8EDF] transition-colors">
+            <button className="text-neutral-500 hover:text-[var(--color-secondary)] transition-colors">
               ⚙️
             </button>
 
             {/* Command Palette Hint */}
             <button
               onClick={() => setCommandPaletteOpen(true)}
-              className="text-xs text-neutral-500 hover:text-[#2D8EDF] transition-colors font-mono flex items-center gap-1"
+              className="text-xs text-neutral-500 hover:text-[var(--color-secondary)] transition-colors font-mono flex items-center gap-1"
             >
               <span>⌘K</span>
             </button>

@@ -13,7 +13,7 @@ export function ShortcutsHint() {
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="text-xs text-neutral-500 hover:text-[#2D8EDF] transition-colors font-mono flex items-center gap-1"
+        className="text-xs text-neutral-500 hover:text-[var(--color-secondary)] transition-colors font-mono flex items-center gap-1"
         title="Keyboard Shortcuts"
       >
         <span>⌨️</span>
@@ -42,7 +42,7 @@ export function ShortcutsHint() {
             >
               <div className="bg-[#0e1117] border border-[#1a1f2e] rounded-xl p-6 shadow-2xl">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-[#2D8EDF]">
+                  <h2 className="text-xl font-bold text-[var(--color-secondary)]">
                     ⌨️ Keyboard Shortcuts
                   </h2>
                   <button
@@ -63,7 +63,7 @@ export function ShortcutsHint() {
                       {Object.entries(KEYBOARD_SHORTCUTS.navigation).map(([key, shortcut]) => (
                         <div key={key} className="flex items-center justify-between">
                           <span className="text-neutral-300 text-sm">{shortcut.description}</span>
-                          <kbd className="px-2 py-1 bg-[#1a1f2e] border border-[#2a2f3e] rounded text-xs font-mono text-[#2D8EDF]">
+                          <kbd className="px-2 py-1 bg-[#1a1f2e] border border-[#2a2f3e] rounded text-xs font-mono text-[var(--color-secondary)]">
                             ⌘{shortcut.key}
                           </kbd>
                         </div>
@@ -80,7 +80,7 @@ export function ShortcutsHint() {
                       {Object.entries(KEYBOARD_SHORTCUTS.actions).map(([key, shortcut]) => (
                         <div key={key} className="flex items-center justify-between">
                           <span className="text-neutral-300 text-sm">{shortcut.description}</span>
-                          <kbd className="px-2 py-1 bg-[#1a1f2e] border border-[#2a2f3e] rounded text-xs font-mono text-[#2D8EDF]">
+                          <kbd className="px-2 py-1 bg-[#1a1f2e] border border-[#2a2f3e] rounded text-xs font-mono text-[var(--color-secondary)]">
                             ⌘{shortcut.key}
                           </kbd>
                         </div>
@@ -97,7 +97,7 @@ export function ShortcutsHint() {
                       {Object.entries(KEYBOARD_SHORTCUTS.tools).map(([key, shortcut]) => (
                         <div key={key} className="flex items-center justify-between">
                           <span className="text-neutral-300 text-sm">{shortcut.description}</span>
-                          <kbd className="px-2 py-1 bg-[#1a1f2e] border border-[#2a2f3e] rounded text-xs font-mono text-[#2D8EDF]">
+                          <kbd className="px-2 py-1 bg-[#1a1f2e] border border-[#2a2f3e] rounded text-xs font-mono text-[var(--color-secondary)]">
                             ⌘{shortcut.key}
                           </kbd>
                         </div>

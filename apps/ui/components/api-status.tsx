@@ -35,12 +35,12 @@ export function ApiStatus() {
             </span>
           </div>
           <div className={`text-sm font-mono ${
-            isConnected ? "text-[#16A34A]" : "text-[#F43F5E]"
+            isConnected ? "text-[#16A34A]" : "text-[var(--color-danger)]"
           }`}>
             {healthLoading ? (
               <div className="flex items-center gap-2">
                 <SpinnerDots size="sm" color="cyan" />
-                <span className="text-[#2D8EDF]">CONNECTING</span>
+                <span className="text-[var(--color-secondary)]">CONNECTING</span>
               </div>
             ) : (
               status

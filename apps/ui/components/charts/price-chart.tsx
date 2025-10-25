@@ -101,7 +101,7 @@ function PriceChartInner({
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle className="text-[#F43F5E]">Failed to Load Chart</CardTitle>
+          <CardTitle className="text-[var(--color-danger)]">Failed to Load Chart</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-neutral-400 text-sm">
@@ -179,13 +179,13 @@ function PriceChartInner({
                 <>
                   <ReferenceLine 
                     y={entryPrice} 
-                    stroke="#2D8EDF" 
+                    stroke="var(--color-secondary)" 
                     strokeDasharray="5 5"
                     label={{ value: "Entry", position: "topRight" }}
                   />
                   <ReferenceLine 
                     y={stopPrice} 
-                    stroke="#f43f5e" 
+                    stroke="var(--color-danger)" 
                     strokeDasharray="5 5"
                     label={{ value: "Stop", position: "bottomRight" }}
                   />

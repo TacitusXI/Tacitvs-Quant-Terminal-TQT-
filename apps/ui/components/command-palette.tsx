@@ -192,9 +192,9 @@ export function CommandPalette() {
             transition={{ duration: 0.2 }}
             className="fixed top-1/4 left-1/2 -translate-x-1/2 w-full max-w-2xl z-[101]"
           >
-            <div className="bg-[#0a0a14] border-2 border-[#6243DD] rounded-2xl shadow-2xl overflow-hidden neon-glow-purple">
+            <div className="bg-[#0a0a14] border-2 border-[var(--color-primary)] rounded-2xl shadow-2xl overflow-hidden neon-glow-purple">
               {/* Search Input */}
-              <div className="flex items-center gap-3 px-4 py-4 border-b border-[#6243DD]/30 bg-[#050508]">
+              <div className="flex items-center gap-3 px-4 py-4 border-b border-[var(--color-primary)]/30 bg-[#050508]">
                 <span className="text-2xl">🔍</span>
                 <input
                   type="text"
@@ -205,7 +205,7 @@ export function CommandPalette() {
                   className="flex-1 bg-transparent text-lg text-white placeholder:text-neutral-600 outline-none font-mono"
                   autoFocus
                 />
-                <kbd className="px-2 py-1 text-xs font-mono bg-[#6243DD]/20 text-[#2D8EDF] rounded border border-[#6243DD]/30">
+                <kbd className="px-2 py-1 text-xs font-mono bg-[var(--color-primary)]/20 text-[var(--color-secondary)] rounded border border-[var(--color-primary)]/30">
                   ESC
                 </kbd>
               </div>
@@ -226,8 +226,8 @@ export function CommandPalette() {
                       className={cn(
                         "flex items-center justify-between px-4 py-3 cursor-pointer transition-colors border-b border-neutral-800/50",
                         index === selectedIndex
-                          ? "bg-[#6243DD]/20 border-l-4 border-l-[#2D8EDF]"
-                          : "hover:bg-[#6243DD]/10"
+                          ? "bg-[var(--color-primary)]/20 border-l-4 border-l-[var(--color-secondary)]"
+                          : "hover:bg-[var(--color-primary)]/10"
                       )}
                       onClick={() => command.action()}
                     >
@@ -245,7 +245,7 @@ export function CommandPalette() {
                         </div>
                       </div>
                       {command.shortcut && (
-                        <kbd className="px-2 py-1 text-xs font-mono bg-[#6243DD]/20 text-[#2D8EDF] rounded border border-[#6243DD]/30">
+                        <kbd className="px-2 py-1 text-xs font-mono bg-[var(--color-primary)]/20 text-[var(--color-secondary)] rounded border border-[var(--color-primary)]/30">
                           {command.shortcut}
                         </kbd>
                       )}
@@ -255,7 +255,7 @@ export function CommandPalette() {
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-4 py-2 bg-[#050508] border-t border-[#6243DD]/30 text-xs text-neutral-500 font-mono">
+              <div className="flex items-center justify-between px-4 py-2 bg-[#050508] border-t border-[var(--color-primary)]/30 text-xs text-neutral-500 font-mono">
                 <div className="flex gap-4">
                   <span>↑↓ Navigate</span>
                   <span>↵ Select</span>

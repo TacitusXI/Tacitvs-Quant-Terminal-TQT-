@@ -74,17 +74,17 @@ export class ErrorBoundary extends Component<Props, State> {
       // Default fallback UI
       return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-[#0a0b0e]">
-          <Card className="max-w-2xl w-full border-[#F43F5E]">
+          <Card className="max-w-2xl w-full border-[var(--color-danger)]">
             <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-[#F43F5E]">
+              <CardTitle className="flex items-center gap-3 text-[var(--color-danger)]">
                 <span className="text-4xl">⚠️</span>
                 <span>Something Went Wrong</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Error Message */}
-              <div className="p-4 bg-[#F43F5E]/10 border border-[#F43F5E]/30 rounded-lg">
-                <div className="text-sm font-mono text-[#F43F5E] mb-2">
+              <div className="p-4 bg-[var(--color-danger)]/10 border border-[var(--color-danger)]/30 rounded-lg">
+                <div className="text-sm font-mono text-[var(--color-danger)] mb-2">
                   Error:
                 </div>
                 <div className="text-sm font-mono text-neutral-300">
@@ -95,7 +95,7 @@ export class ErrorBoundary extends Component<Props, State> {
               {/* Error Details (Development only) */}
               {process.env.NODE_ENV === "development" && this.state.errorInfo && (
                 <details className="p-4 bg-[#0a0a14] border border-neutral-800 rounded-lg">
-                  <summary className="text-sm font-mono text-neutral-400 cursor-pointer hover:text-[#2D8EDF]">
+                  <summary className="text-sm font-mono text-neutral-400 cursor-pointer hover:text-[var(--color-secondary)]">
                     Show stack trace
                   </summary>
                   <pre className="mt-3 text-xs font-mono text-neutral-500 overflow-x-auto">

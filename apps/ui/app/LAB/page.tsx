@@ -16,11 +16,11 @@ export default function LAB() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold cyber-title">LAB Terminal</h1>
-            <p className="text-[#2D8EDF] font-mono text-sm">Research playground for backtests, walk-forward, and optimization</p>
+            <p className="text-[var(--color-secondary)] font-mono text-sm">Research playground for backtests, walk-forward, and optimization</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-[#7FB7FF] rounded-full cyber-lamp" />
-            <span className="text-sm font-mono text-[#7FB7FF] uppercase tracking-wider">RESEARCH MODE</span>
+            <div className="w-3 h-3 bg-[var(--color-accent-light)] rounded-full cyber-lamp" />
+            <span className="text-sm font-mono text-[var(--color-accent-light)] uppercase tracking-wider">RESEARCH MODE</span>
           </div>
         </div>
 

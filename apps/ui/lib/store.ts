@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { ThemeName } from "./themes";
 
 // OPS Mode types
 export type OpsMode = "ARM" | "HOLD" | "SIM" | "OFF";
@@ -14,6 +15,9 @@ interface UIState {
   
   // Data Mode
   dataMode: DataMode;
+  
+  // Theme
+  currentTheme: ThemeName;
   
   // UI State
   paletteOpen: boolean;
@@ -31,6 +35,7 @@ interface UIState {
   setRiskPct: (pct: number) => void;
   setRouting: (mode: RoutingMode) => void;
   setDataMode: (mode: DataMode) => void;
+  setTheme: (theme: ThemeName) => void;
   togglePalette: () => void;
   setActivePage: (page: string) => void;
   setBackendConnected: (connected: boolean) => void;
@@ -44,6 +49,7 @@ export const useUIStore = create<UIState>((set) => ({
   riskPct: 1.0,
   routing: "maker",
   dataMode: "MOCK", // Start with MOCK data for easier demo
+  currentTheme: "blade", // Default theme
   paletteOpen: false,
   activePage: "ops",
   backendConnected: false,
@@ -55,6 +61,7 @@ export const useUIStore = create<UIState>((set) => ({
   setRiskPct: (pct) => set({ riskPct: pct }),
   setRouting: (mode) => set({ routing: mode }),
   setDataMode: (mode) => set({ dataMode: mode }),
+  setTheme: (theme) => set({ currentTheme: theme }),
   togglePalette: () => set((state) => ({ paletteOpen: !state.paletteOpen })),
   setActivePage: (page) => set({ activePage: page }),
   setBackendConnected: (connected) => set({ backendConnected: connected }),
