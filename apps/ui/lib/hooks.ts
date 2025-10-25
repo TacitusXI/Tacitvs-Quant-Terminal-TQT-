@@ -20,13 +20,17 @@ import {
   type MonteCarloRequest,
   type OptimizeRequest,
 } from "@/lib/api";
+import { useUIStore } from "@/lib/store";
 
-// Health check hook
+// Health check hook - only in LIVE mode
 export function useHealth() {
+  const { dataMode } = useUIStore();
+  
   return useQuery({
     queryKey: ["health"],
     queryFn: getHealth,
-    refetchInterval: 30000, // Check every 30 seconds
+    enabled: dataMode === "LIVE", // Only fetch in LIVE mode
+    refetchInterval: dataMode === "LIVE" ? 30000 : false, // Check every 30 seconds only in LIVE mode
   });
 }
 
@@ -62,9 +66,12 @@ export function useStrategySignal(data: StrategySignalRequest) {
 
 // Data management hooks
 export function useDataList() {
+  const { dataMode } = useUIStore();
+  
   return useQuery({
     queryKey: ["data-list"],
     queryFn: getDataList,
+    enabled: dataMode === "LIVE", // Only fetch in LIVE mode
     staleTime: 60000, // 1 minute
   });
 }
