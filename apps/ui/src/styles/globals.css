@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-mono: 'JetBrains Mono', 'Share Tech Mono', monospace;
+  
+  /* Base colors */
+  --bg: #000000;
+  --fg: #d0d0d0;
+  --grid: #101010;
+  --panel: #0b0b0b;
+  
+  /* Default theme (Matrix) */
+  --accent: #00FF84;
+  --accent2: #00CC66;
+}
+
+html[data-theme="matrix"] {
+  --accent: #00FF84;
+  --accent2: #00CC66;
+}
+
+html[data-theme="blackops"] {
+  --accent: #fe0174;
+  --accent2: #f82909;
+}
+
+html[data-theme="neon"] {
+  --accent: #319ff8;
+  --accent2: #422d94;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--grid);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Glow effects */
+.glow {
+  text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+}
+
+.glow-sm {
+  text-shadow: 0 0 5px var(--accent);
+}
+
+.border-glow {
+  box-shadow: 0 0 10px var(--accent2), inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Grid pattern overlay */
+.grid-overlay {
+  background-image: 
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Panel styling */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--grid);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Scanline effect */
+.scanline::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to bottom, transparent, var(--accent2), transparent);
+  animation: scan 8s linear infinite;
+  pointer-events: none;
+  opacity: 0.1;
+  z-index: 9999;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* Terminal-style text */
+.terminal-text {
+  font-variant-ligatures: none;
+  letter-spacing: 0.05em;
+}
+
+/* Pulse animation for live data */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Buttons */
+button {
+  font-family: var(--font-mono);
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  filter: brightness(1.2);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Inputs */
+input, textarea, select {
+  font-family: var(--font-mono);
+  background: var(--panel);
+  border: 1px solid var(--grid);
+  color: var(--fg);
+  padding: 8px 12px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent2);
+}
+
+/* Links */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--accent2);
+  text-shadow: 0 0 5px var(--accent);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--grid);
+}
+
+th {
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+tr:hover {
+  background: var(--grid);
+}
+
+/* Cards */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--grid);
+  border-radius: 4px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--accent2);
+  box-shadow: 0 0 15px var(--accent2);
+}
+
+/* Status indicators */
+.status-active {
+  color: var(--accent);
+}
+
+.status-inactive {
+  color: var(--grid);
+}
+
+.status-warning {
+  color: #ffaa00;
+}
+
+.status-error {
+  color: #ff0000;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  border: 2px solid var(--grid);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.8s linear infinite;
+}
+
