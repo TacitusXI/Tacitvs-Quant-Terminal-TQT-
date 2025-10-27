@@ -8,6 +8,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeInitializer } from "@/components/ThemeInitializer";
 import { QueryProvider } from "@/components/QueryProvider";
+import { TacitvsRadio } from "@/components/TacitvsRadio";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
         <QueryProvider>
           <ThemeInitializer />
           {children}
+          <TacitvsRadio />
         </QueryProvider>
       </body>
     </html>

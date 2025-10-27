@@ -145,6 +145,18 @@ from core.backtest.engine import BacktestEngine
 
 data_manager = DataManager()
 
+# ===== ROUTERS =====
+
+# Import and include candles router
+try:
+    from apps.api.routes import candles
+    # Share data_manager with candles router
+    candles.data_manager = data_manager
+    app.include_router(candles.router)
+    print("✅ Candles router included")
+except Exception as e:
+    print(f"⚠️ Failed to load candles router: {e}")
+
 
 # ===== ENDPOINTS =====
 

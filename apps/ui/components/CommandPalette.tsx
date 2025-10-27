@@ -16,7 +16,7 @@ interface Command {
   id: string;
   label: string;
   action: () => void;
-  category: 'nav' | 'theme' | 'system';
+  category: 'nav' | 'theme' | 'system' | 'radio';
 }
 
 export const CommandPalette: React.FC = () => {
@@ -28,6 +28,11 @@ export const CommandPalette: React.FC = () => {
     setTheme: updateTheme,
     audioEnabled,
     toggleAudio,
+    radioEnabled,
+    toggleRadio,
+    nextRadioStation,
+    radioVolume,
+    setRadioVolume,
   } = useAppStore();
   
   const [search, setSearch] = useState('');
@@ -43,6 +48,12 @@ export const CommandPalette: React.FC = () => {
     { id: 'theme-matrix', label: 'Switch to Matrix theme', action: () => { updateTheme('matrix'); setTheme('matrix'); }, category: 'theme' },
     { id: 'theme-blackops', label: 'Switch to BlackOps theme', action: () => { updateTheme('blackops'); setTheme('blackops'); }, category: 'theme' },
     { id: 'theme-neon', label: 'Switch to Neon theme', action: () => { updateTheme('neon'); setTheme('neon'); }, category: 'theme' },
+    
+    // Radio
+    { id: 'radio-toggle', label: radioEnabled ? 'Stop Radio' : 'Start Radio', action: toggleRadio, category: 'radio' },
+    { id: 'radio-next', label: 'Next Radio Station', action: nextRadioStation, category: 'radio' },
+    { id: 'radio-vol-up', label: 'Radio Volume +10%', action: () => setRadioVolume(Math.min(1, radioVolume + 0.1)), category: 'radio' },
+    { id: 'radio-vol-down', label: 'Radio Volume -10%', action: () => setRadioVolume(Math.max(0, radioVolume - 0.1)), category: 'radio' },
     
     // System
     { id: 'sys-audio', label: audioEnabled ? 'Disable audio' : 'Enable audio', action: toggleAudio, category: 'system' },

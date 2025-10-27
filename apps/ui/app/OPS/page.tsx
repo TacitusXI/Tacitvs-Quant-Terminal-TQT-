@@ -10,6 +10,8 @@ import { Navigation } from '@/components/Navigation';
 import { TelemetryStrip } from '@/components/TelemetryStrip';
 import { CommandPalette } from '@/components/CommandPalette';
 import { DataPanel, GridMetrics } from '@/components/DataPanel';
+import { CandlestickChart } from '@/components/charts/candlestick-chart';
+import { LivePriceTicker } from '@/components/live-price-ticker';
 import { useAppStore } from '@/lib/store';
 import { playBeep } from '@/lib/audio';
 
@@ -18,10 +20,25 @@ type SystemMode = 'SIM' | 'ARMED' | 'LIVE';
 export default function OPS() {
   const { audioEnabled } = useAppStore();
   const [mode, setMode] = useState<SystemMode>('SIM');
+  const [interval, setInterval] = useState<string>('1h');
+  const [daysBack, setDaysBack] = useState<number>(30);
   
   const handleModeChange = (newMode: SystemMode) => {
     setMode(newMode);
     playBeep('command', audioEnabled);
+  };
+  
+  const handleIntervalChange = (newInterval: string) => {
+    setInterval(newInterval);
+    playBeep('command', audioEnabled);
+    
+    // МАКСИМУМ данных для каждого таймфрейма
+    if (newInterval === '1m') setDaysBack(7);        // ~10K свечей (лимит API)
+    else if (newInterval === '5m') setDaysBack(30);  // ~8K свечей
+    else if (newInterval === '15m') setDaysBack(90); // ~8K свечей
+    else if (newInterval === '1h') setDaysBack(365); // ~8K свечей
+    else if (newInterval === '4h') setDaysBack(730); // ~4K свечей
+    else if (newInterval === '1d') setDaysBack(730); // ~730 свечей (2 года!)
   };
   
   return (
@@ -157,6 +174,68 @@ export default function OPS() {
             ))}
           </div>
         </DataPanel>
+        
+        {/* Live Price Tickers */}
+        <div className="grid md:grid-cols-3 gap-4 mb-6">
+          {['BTC-PERP', 'ETH-PERP', 'SOL-PERP'].map((market) => (
+            <DataPanel key={market} title={market} glow>
+              <LivePriceTicker 
+                market={market}
+                size="md"
+                showChange
+                showVolume
+              />
+            </DataPanel>
+          ))}
+        </div>
+        
+        {/* Price Chart with R-Ruler */}
+        <div className="mb-6">
+          <DataPanel 
+            title={`BTC-PERP • ${interval.toUpperCase()} • ${daysBack} days`}
+            glow
+          >
+            {/* Timeframe Selector */}
+            <div className="mb-4 flex items-center gap-2 flex-wrap">
+              <span className="font-mono text-xs text-[var(--fg)] opacity-60 mr-2">TIMEFRAME:</span>
+              {['1m', '5m', '15m', '1h', '4h', '1d'].map((tf) => (
+                <button
+                  key={tf}
+                  onClick={() => handleIntervalChange(tf)}
+                  className={`
+                    px-3 py-1 font-mono text-xs font-bold uppercase
+                    transition-all duration-200
+                    ${interval === tf
+                      ? 'bg-[var(--accent)] text-[var(--bg-primary)] border-glow'
+                      : 'bg-[var(--grid)] text-[var(--fg)] hover:bg-[var(--border)] border border-[var(--border)]'
+                    }
+                  `}
+                >
+                  {tf}
+                </button>
+              ))}
+              <div className="ml-auto font-mono text-xs text-[var(--accent2)]">
+                📊 {daysBack === 365 ? '1 year' : `${daysBack} days`} of data
+              </div>
+            </div>
+            
+            <CandlestickChart 
+              market="BTC-PERP"
+              interval={interval}
+              daysBack={daysBack}
+              showVolume={true}
+              showRRuler={true}
+              entryPrice={45230}
+              stopPrice={44100}
+              targetPrice={47500}
+              indicators={{
+                sma20: true,
+                ema12: true,
+              }}
+              height={500}
+            />
+          </DataPanel>
+        </div>
         
         {/* Strategy Status */}
         <div className="grid md:grid-cols-3 gap-6 mb-6">

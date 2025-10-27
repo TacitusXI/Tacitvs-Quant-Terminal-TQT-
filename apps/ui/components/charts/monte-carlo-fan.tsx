@@ -1,6 +1,6 @@
 "use client";
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ChartErrorBoundary } from "@/components/chart-error-boundary";
 import { SkeletonChart } from "@/components/ui/skeleton";
@@ -84,39 +84,122 @@ function MonteCarloFanChartInner({ data, height = 300, className, isLoading = fa
     <Card className={className}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          🎲 Monte Carlo Fan Chart
+          <span className="text-[var(--accent)]">🎲</span> Monte Carlo Simulation Fan Chart
+          <span className="text-xs text-neutral-500 font-mono font-normal">
+            ({mockData.simulations.toLocaleString()} simulations)
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px] w-full">
+        <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a1f2e" />
+            <ComposedChart data={chartData} margin={{ top: 10, right: 50, left: 20, bottom: 20 }}>
+              <defs>
+                {/* Gradient for P5-P25 band (worst outcomes) */}
+                <linearGradient id="bandP5P25" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#EF4444" stopOpacity={0.15} />
+                  <stop offset="100%" stopColor="#EF4444" stopOpacity={0.05} />
+                </linearGradient>
+                
+                {/* Gradient for P25-P50 band (below median) */}
+                <linearGradient id="bandP25P50" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#fbbf24" stopOpacity={0.2} />
+                  <stop offset="100%" stopColor="#fbbf24" stopOpacity={0.08} />
+                </linearGradient>
+                
+                {/* Gradient for P50-P75 band (above median) */}
+                <linearGradient id="bandP50P75" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#10B981" stopOpacity={0.2} />
+                  <stop offset="100%" stopColor="#10B981" stopOpacity={0.08} />
+                </linearGradient>
+                
+                {/* Gradient for P75-P95 band (best outcomes) */}
+                <linearGradient id="bandP75P95" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.25} />
+                  <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
+              
+              <CartesianGrid strokeDasharray="3 3" stroke="#1a1f2e" vertical={false} />
+              
               <XAxis 
                 dataKey="period" 
-                stroke="#6b7280"
-                fontSize={12}
-                label={{ value: 'Period', position: 'insideBottom', offset: -5 }}
+                stroke="var(--accent2)"
+                fontSize={11}
+                fontFamily="monospace"
+                label={{ 
+                  value: 'Trading Period', 
+                  position: 'insideBottom', 
+                  offset: -10,
+                  fill: "var(--accent2)",
+                  fontSize: 11
+                }}
               />
+              
               <YAxis 
-                stroke="#6b7280"
-                fontSize={12}
+                stroke="var(--accent2)"
+                fontSize={11}
+                fontFamily="monospace"
                 tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                label={{ 
+                  value: 'Portfolio Value', 
+                  angle: -90, 
+                  position: 'insideLeft',
+                  fill: "var(--accent2)",
+                  fontSize: 11
+                }}
               />
+              
               <Tooltip content={<CustomTooltip />} />
               
-              {/* P5 Line */}
+              {/* Area bands showing probability ranges */}
+              {/* P5-P25 Band (5th-25th percentile) */}
+              <Area
+                type="monotone"
+                dataKey="p25"
+                stroke="none"
+                fill="url(#bandP5P25)"
+                fillOpacity={1}
+              />
+              
+              {/* P25-P50 Band (25th-50th percentile) */}
+              <Area
+                type="monotone"
+                dataKey="p50"
+                stroke="none"
+                fill="url(#bandP25P50)"
+                fillOpacity={1}
+              />
+              
+              {/* P50-P75 Band (50th-75th percentile) */}
+              <Area
+                type="monotone"
+                dataKey="p75"
+                stroke="none"
+                fill="url(#bandP50P75)"
+                fillOpacity={1}
+              />
+              
+              {/* P75-P95 Band (75th-95th percentile) */}
+              <Area
+                type="monotone"
+                dataKey="p95"
+                stroke="none"
+                fill="url(#bandP75P95)"
+                fillOpacity={1}
+              />
+              
+              {/* Percentile Lines */}
               <Line
                 type="monotone"
                 dataKey="p5"
-                stroke="var(--color-danger)"
-                strokeWidth={1}
-                strokeDasharray="2 2"
+                stroke="#EF4444"
+                strokeWidth={1.5}
+                strokeDasharray="3 3"
                 dot={false}
-                name="5th Percentile"
+                name="5th Percentile (Worst Case)"
               />
               
-              {/* P25 Line */}
               <Line
                 type="monotone"
                 dataKey="p25"
@@ -127,38 +210,36 @@ function MonteCarloFanChartInner({ data, height = 300, className, isLoading = fa
                 name="25th Percentile"
               />
               
-              {/* P50 Line (Median) */}
+              {/* P50 Line (Median) - thicker and solid */}
               <Line
                 type="monotone"
                 dataKey="p50"
                 stroke="#e5e7eb"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 dot={false}
-                name="50th Percentile (Median)"
+                name="Median (50th Percentile)"
               />
               
-              {/* P75 Line */}
               <Line
                 type="monotone"
                 dataKey="p75"
-                stroke="#16A34A"
+                stroke="#10B981"
                 strokeWidth={1}
                 strokeDasharray="2 2"
                 dot={false}
                 name="75th Percentile"
               />
               
-              {/* P95 Line */}
               <Line
                 type="monotone"
                 dataKey="p95"
-                stroke="var(--color-secondary)"
-                strokeWidth={1}
-                strokeDasharray="2 2"
+                stroke="var(--accent)"
+                strokeWidth={1.5}
+                strokeDasharray="3 3"
                 dot={false}
-                name="95th Percentile"
+                name="95th Percentile (Best Case)"
               />
-            </LineChart>
+            </ComposedChart>
           </ResponsiveContainer>
         </div>
         
@@ -184,27 +265,44 @@ function MonteCarloFanChartInner({ data, height = 300, className, isLoading = fa
           </div>
         </div>
 
-        {/* Legend */}
-        <div className="mt-4 grid grid-cols-5 gap-2 text-xs">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-1 bg-rose-400"></div>
-            <span className="text-neutral-400">P5</span>
+        {/* Legend with detailed explanation */}
+        <div className="mt-4 pt-4 border-t border-[var(--border)]">
+          <div className="text-xs text-neutral-500 mb-2 font-mono">PERCENTILE BANDS</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+            <div className="flex items-start gap-2">
+              <div className="w-3 h-3 bg-rose-400 opacity-20 rounded mt-0.5"></div>
+              <div>
+                <div className="text-rose-400 font-mono font-bold">5th-25th</div>
+                <div className="text-neutral-500 text-[10px]">Worst 25%</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="w-3 h-3 bg-amber-400 opacity-30 rounded mt-0.5"></div>
+              <div>
+                <div className="text-amber-400 font-mono font-bold">25th-50th</div>
+                <div className="text-neutral-500 text-[10px]">Below median</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="w-3 h-3 bg-emerald-400 opacity-30 rounded mt-0.5"></div>
+              <div>
+                <div className="text-emerald-400 font-mono font-bold">50th-75th</div>
+                <div className="text-neutral-500 text-[10px]">Above median</div>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <div className="w-3 h-3 bg-[var(--accent)] opacity-40 rounded mt-0.5"></div>
+              <div>
+                <div className="text-[var(--accent)] font-mono font-bold">75th-95th</div>
+                <div className="text-neutral-500 text-[10px]">Best 25%</div>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-1 bg-amber-400"></div>
-            <span className="text-neutral-400">P25</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-1 bg-neutral-200"></div>
-            <span className="text-neutral-400">P50</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-1 bg-emerald-400"></div>
-            <span className="text-neutral-400">P75</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-1 bg-cyan-400"></div>
-            <span className="text-neutral-400">P95</span>
+          
+          {/* Interpretation help */}
+          <div className="mt-3 p-2 bg-[var(--panel)] rounded border border-[var(--border)] text-[10px] text-neutral-400 font-mono">
+            <span className="text-neutral-300">💡 Reading:</span> The median line shows typical outcome. 
+            Wider bands = higher uncertainty. 50% of simulations fall within the yellow-green range.
           </div>
         </div>
       </CardContent>
