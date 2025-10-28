@@ -105,3 +105,44 @@ export function initializeTheme(theme: ThemeName): void {
   setTheme(theme);
 }
 
+/**
+ * Get chart colors based on current theme
+ */
+export function getChartThemeColors(theme: ThemeName) {
+  const baseColors = {
+    background: '#0B0F16',
+    text: '#7FB7FF',
+    grid: '#1B2230',
+    crosshair: '#7FB7FF',
+  };
+
+  const themeColors = {
+    matrix: {
+      upColor: '#00FF84',      // Matrix green
+      downColor: '#00CC66',    // Darker green
+      borderColor: '#00FF84',
+      wickUpColor: '#00FF84',
+      wickDownColor: '#00CC66',
+    },
+    blackops: {
+      upColor: '#fe0174',      // Hot pink
+      downColor: '#f82909',    // Orange-red
+      borderColor: '#fe0174',
+      wickUpColor: '#fe0174',
+      wickDownColor: '#f82909',
+    },
+    neon: {
+      upColor: '#319ff8',      // Bright blue
+      downColor: '#422d94',    // Deep purple
+      borderColor: '#319ff8',
+      wickUpColor: '#319ff8',
+      wickDownColor: '#422d94',
+    },
+  };
+
+  return {
+    ...baseColors,
+    ...themeColors[theme],
+  };
+}
+

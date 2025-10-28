@@ -139,6 +139,16 @@ app.add_middleware(
 # Глобальные объекты (в production будут в DI container или state)
 ev_calculator = EVCalculator(default_maker_bps=-1.5, default_taker_bps=4.5)
 
+# ===== REGISTER ROUTERS =====
+
+# Import routes
+from routes.candles import router as candles_router
+from routes.indicators import router as indicators_router
+
+# Register routers
+app.include_router(candles_router, prefix="/api", tags=["candles"])
+app.include_router(indicators_router, prefix="/api", tags=["indicators"])
+
 
 # ===== ENDPOINTS =====
 

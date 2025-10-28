@@ -29,7 +29,10 @@ let audioContext: AudioContext | null = null;
  */
 function getAudioContext(): AudioContext {
   if (!audioContext && typeof window !== 'undefined') {
-    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const AudioContextClass = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (AudioContextClass) {
+      audioContext = new AudioContextClass();
+    }
   }
   return audioContext!;
 }

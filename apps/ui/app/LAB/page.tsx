@@ -10,6 +10,7 @@ import { Navigation } from '@/components/Navigation';
 import { TelemetryStrip } from '@/components/TelemetryStrip';
 import { CommandPalette } from '@/components/CommandPalette';
 import { DataPanel, GridMetrics } from '@/components/DataPanel';
+import { ChartPanel } from '@/components/ChartPanel';
 import { useAppStore } from '@/lib/store';
 import { playBeep, playDoubleBeep } from '@/lib/audio';
 
@@ -140,16 +141,9 @@ export default function LAB() {
           </DataPanel>
         </div>
         
-        {/* Chart Placeholder */}
-        <DataPanel title="Equity Curve" className="mb-6">
-          <div className="h-80 flex items-center justify-center bg-[var(--grid)] border border-[var(--border)]">
-            <div className="text-center">
-              <div className="text-6xl mb-4 opacity-20">📊</div>
-              <p className="text-sm font-mono text-[var(--fg)] opacity-40">
-                Equity curve chart (TradingView Lightweight Charts)
-              </p>
-            </div>
-          </div>
+        {/* Live Chart */}
+        <DataPanel title="Market Chart — Real-Time Visualization" className="mb-6" glow>
+          <ChartPanel />
         </DataPanel>
         
         {/* Trade List */}
